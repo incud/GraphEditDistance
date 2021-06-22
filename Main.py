@@ -36,7 +36,7 @@ for vertices in dataset.get_graphs_vertices_count():
                 print("Vertici 5 - Gia fatto indice: ", g1_index, n1)
                 continue
 
-            if vertices == 5 and g1_index == 2 and g2_index < 5:
+            if vertices == 5 and g1_index == 4 and g2_index < 4:
                 n1 = dataset.get_graph_name(vertices, g1_index)
                 n2 = dataset.get_graph_name(vertices, g2_index)
                 print("Vertici 5 - Gia fatto indice: ", g1_index, n1, "vs", g2_index, n2)
