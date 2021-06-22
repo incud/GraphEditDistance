@@ -3,98 +3,207 @@ from GraphEditDistanceCalculator import GraphEditDistanceCalculator
 from os import path
 import pandas
 from datetime import datetime
+import multiprocessing
 
 PATH = "graph_experiments/dwave_experiments.pickle"
-if path.exists(PATH):
-    df = pandas.read_pickle(PATH)
-    print("Loaded from file")
-else:
-    COLUMNS = ["num_source_variables", "num_target_variables", "max_chain_length", "sum_chain_length", "chain_strength", "chain_break_method",
-               "solver", "machine", "best_sample", "best_energy", "mean_energy", "best_sample_pp", "best_energy_pp", "mean_energy_pp",
-               'vertices', 'g1_name', 'g2_name', 'a', 'b', 'start', 'end']
-    df = pandas.DataFrame(columns=COLUMNS)
-    print("Created new dataframe")
-
 pandas.set_option('display.max_rows', 500)
 pandas.set_option('display.max_columns', 500)
 pandas.set_option('display.width', 1000)
 
-dataset = SmallGraphDataset()
 
-for vertices in dataset.get_graphs_vertices_count():
+def load_experiments():
+    if path.exists(PATH):
+        df = pandas.read_pickle(PATH)
+        print("Loaded from file")
+    else:
+        COLUMNS = ["num_source_variables", "num_target_variables", "max_chain_length", "sum_chain_length",
+                   "chain_strength", "chain_break_method",
+                   "solver", "machine", "best_sample", "best_energy", "mean_energy", "best_sample_pp", "best_energy_pp",
+                   "mean_energy_pp",
+                   'vertices', 'g1_name', 'g2_name', 'a', 'b', 'start', 'end']
+        df = pandas.DataFrame(columns=COLUMNS)
+        print("Created new dataframe")
+    return df
 
-    if vertices == 3 or vertices == 4:
-        print("Vertici", vertices, "- Gia fatti")
-        continue
 
-    for g1_index in range(dataset.get_graphs_count(vertices)):
+def worker_process(g1, g2, n1, n2, a, b, return_dict):
+    return_dict["rows"] = []
+    calculator = GraphEditDistanceCalculator(g1=g1, g2=g2, a=a, b=b)
 
-        for g2_index in range(dataset.get_graphs_count(vertices)):
+    start = datetime.now()
+    sample, energy, info = calculator.run_simulated()
+    end = datetime.now()
 
-            if vertices == 5 and g1_index < 2:
-                n1 = dataset.get_graph_name(vertices, g1_index)
-                print("Vertici 5 - Gia fatto indice: ", g1_index, n1)
-                continue
+    row = {'vertices': vertices, 'g1_name': n1, 'g2_name': n2, 'start': start, 'end': end, 'a': a, 'b': b}
+    row = {**row, **info}
+    return_dict["rows"].append(row)
+    print(".", end="", flush=True)
 
-            if vertices == 5 and g1_index == 4 and g2_index < 4:
+    for is_adv, is_leap in [(False, False), (True, False), (False, True)]:
+        calculator = GraphEditDistanceCalculator(g1=g1, g2=g2, a=a, b=b)
+
+        start = datetime.now()
+        sample, energy, info = calculator.run_dwave(is_advantage=is_adv, is_leap=is_leap)
+        end = datetime.now()
+
+        row = {'vertices': vertices, 'g1_name': n1, 'g2_name': n2, 'start': start, 'end': end, 'a': a, 'b': b}
+        row = {**row, **info}
+        return_dict["rows"].append(row)
+        print(".", end="", flush=True)
+
+    print("END", flush=True)
+
+
+def manager_process():
+    df = load_experiments()
+    dataset = SmallGraphDataset()
+
+    manager = multiprocessing.Manager()
+    return_dict = manager.dict()
+
+    for vertices in dataset.get_graphs_vertices_count():
+
+        if vertices == 3 or vertices == 4:
+            print("Vertici", vertices, "- Gia fatti")
+            continue
+
+        for g1_index in range(dataset.get_graphs_count(vertices)):
+
+            for g2_index in range(dataset.get_graphs_count(vertices)):
+
+                if vertices == 5 and g1_index < 5:
+                    n1 = dataset.get_graph_name(vertices, g1_index)
+                    print("Vertici 5 - Gia fatto indice: ", g1_index, n1)
+                    continue
+
+                if vertices == 5 and g1_index == 5 and g2_index < 9:
+                    n1 = dataset.get_graph_name(vertices, g1_index)
+                    n2 = dataset.get_graph_name(vertices, g2_index)
+                    print("Vertici 5 - Gia fatto indice: ", g1_index, n1, "vs", g2_index, n2)
+                    continue
+
+                g1 = dataset.get_graph_object(vertices, g1_index)
+                g2 = dataset.get_graph_object(vertices, g2_index)
                 n1 = dataset.get_graph_name(vertices, g1_index)
                 n2 = dataset.get_graph_name(vertices, g2_index)
-                print("Vertici 5 - Gia fatto indice: ", g1_index, n1, "vs", g2_index, n2)
-                continue
+                print("NEW INSTANCE", vertices, n1, n2, flush=True)
+                a_b_values = [(1, 0.1), (1, 0.05), (1, 0.01), (1, 0.005)]
+                for (a, b) in a_b_values:
+                    print(f"a={a}, b={b}: ", end="", flush=True)
 
-            g1 = dataset.get_graph_object(vertices, g1_index)
-            g2 = dataset.get_graph_object(vertices, g2_index)
-            n1 = dataset.get_graph_name(vertices, g1_index)
-            n2 = dataset.get_graph_name(vertices, g2_index)
-            print("NEW INSTANCE", vertices, n1, n2, flush=True)
-            a_b_values = [(1, 0.1), (1, 0.05), (1, 0.01), (1, 0.005)]
-            for (a, b) in a_b_values:
-                print(f"a={a}, b={b}: ", end="", flush=True)
+                    return_dict.clear()
 
-                calculator = GraphEditDistanceCalculator(g1=g1, g2=g2, a=a, b=b)
-
-                start = datetime.now()
-                sample, energy, info = calculator.run_simulated()
-                end = datetime.now()
-
-                row = {'vertices': vertices, 'g1_name': n1, 'g2_name': n2, 'start': start, 'end': end, 'a': a, 'b': b}
-                row = {**row, **info}
-                df.loc[len(df)] = row
-                print(".", end="", flush=True)
-                df.to_pickle(PATH)
-
-                for is_adv, is_leap in [(False, False), (True, False), (False, True)]:
-                    calculator = GraphEditDistanceCalculator(g1=g1, g2=g2, a=a, b=b)
-
-                    start = datetime.now()
-                    sample, energy, info = calculator.run_dwave(is_advantage=is_adv, is_leap=is_leap)
-                    end = datetime.now()
-
-                    row = {'vertices': vertices, 'g1_name': n1, 'g2_name': n2, 'start': start, 'end': end, 'a': a, 'b': b}
-                    row = {**row, **info}
-                    df.loc[len(df)] = row
-                    print(".", end="", flush=True)
-                    df.to_pickle(PATH)
-
-                print("END", flush=True)
-                df.to_pickle(PATH)
-
-df.to_pickle(PATH)
+                    p = multiprocessing.Process(target=worker_process, args=(g1, g2, n1, n2, a, b, return_dict))
+                    p.start()
+                    p.join()
 
 
+from SmallGraphDataset import SmallGraphDataset
+from GraphEditDistanceCalculator import GraphEditDistanceCalculator
+from os import path
+import pandas
+from datetime import datetime
+import multiprocessing
+
+PATH = "graph_experiments/dwave_experiments.pickle"
+pandas.set_option('display.max_rows', 500)
+pandas.set_option('display.max_columns', 500)
+pandas.set_option('display.width', 1000)
 
 
+def load_experiments():
+    if path.exists(PATH):
+        df = pandas.read_pickle(PATH)
+        print("Loaded from file")
+    else:
+        COLUMNS = ["num_source_variables", "num_target_variables", "max_chain_length", "sum_chain_length",
+                   "chain_strength", "chain_break_method",
+                   "solver", "machine", "best_sample", "best_energy", "mean_energy", "best_sample_pp", "best_energy_pp",
+                   "mean_energy_pp",
+                   'vertices', 'g1_name', 'g2_name', 'a', 'b', 'start', 'end']
+        df = pandas.DataFrame(columns=COLUMNS)
+        print("Created new dataframe")
+    return df
 
 
+def worker_process(g1, g2, n1, n2, a, b, return_dict):
+    return_dict["rows"] = []
+    calculator = GraphEditDistanceCalculator(g1=g1, g2=g2, a=a, b=b)
+
+    start = datetime.now()
+    sample, energy, info = calculator.run_simulated()
+    end = datetime.now()
+
+    row = {'vertices': vertices, 'g1_name': n1, 'g2_name': n2, 'start': start, 'end': end, 'a': a, 'b': b}
+    row = {**row, **info}
+    return_dict["rows"].append(row)
+    print(".", end="", flush=True)
+
+    for is_adv, is_leap in [(False, False), (True, False), (False, True)]:
+        calculator = GraphEditDistanceCalculator(g1=g1, g2=g2, a=a, b=b)
+
+        start = datetime.now()
+        sample, energy, info = calculator.run_dwave(is_advantage=is_adv, is_leap=is_leap)
+        end = datetime.now()
+
+        row = {'vertices': vertices, 'g1_name': n1, 'g2_name': n2, 'start': start, 'end': end, 'a': a, 'b': b}
+        row = {**row, **info}
+        return_dict["rows"].append(row)
+        print(".", end="", flush=True)
+
+    print("END", flush=True)
 
 
+def manager_process():
+    df = load_experiments()
+    dataset = SmallGraphDataset()
 
+    manager = multiprocessing.Manager()
+    return_dict = manager.dict()
 
+    for vertices in dataset.get_graphs_vertices_count():
 
+        if vertices == 3 or vertices == 4:
+            print("Vertici", vertices, "- Gia fatti")
+            continue
 
+        for g1_index in range(dataset.get_graphs_count(vertices)):
 
+            for g2_index in range(dataset.get_graphs_count(vertices)):
 
+                if vertices == 5 and g1_index < 5:
+                    n1 = dataset.get_graph_name(vertices, g1_index)
+                    print("Vertici 5 - Gia fatto indice: ", g1_index, n1)
+                    continue
 
+                if vertices == 5 and g1_index == 5 and g2_index < 9:
+                    n1 = dataset.get_graph_name(vertices, g1_index)
+                    n2 = dataset.get_graph_name(vertices, g2_index)
+                    print("Vertici 5 - Gia fatto indice: ", g1_index, n1, "vs", g2_index, n2)
+                    continue
+
+                g1 = dataset.get_graph_object(vertices, g1_index)
+                g2 = dataset.get_graph_object(vertices, g2_index)
+                n1 = dataset.get_graph_name(vertices, g1_index)
+                n2 = dataset.get_graph_name(vertices, g2_index)
+                print("NEW INSTANCE", vertices, n1, n2, flush=True)
+                a_b_values = [(1, 0.1), (1, 0.05), (1, 0.01), (1, 0.005)]
+                for (a, b) in a_b_values:
+                    print(f"a={a}, b={b}: ", end="", flush=True)
+
+                    return_dict.clear()
+
+                    p = multiprocessing.Process(target=worker_process, args=(g1, g2, n1, n2, a, b, return_dict))
+                    p.start()
+                    p.join()
+
+                    rows = return_dict["rows"]
+                    return_dict.clear()
+
+                    for row in rows:
+                        df.loc[len(df)] = row
+
+                    df.to_pickle()
 
 # g1 = dataset.get_graph_object(4, 0)
 # g2 = dataset.get_graph_object(4, 1)
