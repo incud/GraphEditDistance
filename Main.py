@@ -23,23 +23,23 @@ dataset = SmallGraphDataset()
 
 for vertices in dataset.get_graphs_vertices_count():
 
-    if vertices == 3:
-        print("Vertici 3 - Gia fatti")
+    if vertices == 3 or vertices == 4:
+        print("Vertici", vertices, "- Gia fatti")
         continue
 
     for g1_index in range(dataset.get_graphs_count(vertices)):
 
         for g2_index in range(dataset.get_graphs_count(vertices)):
 
-            if vertices == 4 and g1_index < 6:
+            if vertices == 5 and g1_index < 2:
                 n1 = dataset.get_graph_name(vertices, g1_index)
-                print("Vertici 4 - Gia fatto indice: ", g1_index, n1)
+                print("Vertici 5 - Gia fatto indice: ", g1_index, n1)
                 continue
 
-            if vertices == 4 and g1_index == 6 and g2_index < 3:
+            if vertices == 5 and g1_index == 2 and g2_index < 5:
                 n1 = dataset.get_graph_name(vertices, g1_index)
                 n2 = dataset.get_graph_name(vertices, g2_index)
-                print("Vertici 4 - Gia fatto indice: ", g1_index, n1, "vs", g2_index, n2)
+                print("Vertici 5 - Gia fatto indice: ", g1_index, n1, "vs", g2_index, n2)
                 continue
 
             g1 = dataset.get_graph_object(vertices, g1_index)
