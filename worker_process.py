@@ -16,7 +16,7 @@ def worker(vertices, g1, g2, n1, n2, a, b, queue):
     rows.append(row)
     print(".", end="", flush=True)
 
-    for is_adv, is_leap in [(False, False), (True, False), (False, True)]:
+    for is_adv, is_leap in [(True, False)]:
         calculator = GraphEditDistanceCalculator(g1=g1, g2=g2, a=a, b=b)
 
         start = datetime.now()

@@ -53,13 +53,13 @@ class SmallGraphDataset:
         #graphs[N].append((nx.gnm_random_graph(N, 8, seed=13), "random8-4"))
         #graphs[N].append((nx.gnm_random_graph(N, 8, seed=14), "random8-5"))
 
-        N = 8
-        graphs[N] = []
-        graphs[N].append((nx.gnm_random_graph(N, (N//2)*0.2, seed=5434254), "graph_v8_r1"))
-        graphs[N].append((nx.gnm_random_graph(N, (N//2)*0.4, seed=1264363), "graph_v8_r2"))
-        graphs[N].append((nx.gnm_random_graph(N, (N//2)*0.6, seed=4280230), "graph_v8_r3"))
-        graphs[N].append((nx.gnm_random_graph(N, (N//2)*0.8, seed=1456479), "graph_v8_r4"))
-        graphs[N].append((nx.gnm_random_graph(N, (N//2)*0.9, seed=6895675), "graph_v8_r5"))
+        # N = 8
+        # graphs[N] = []
+        # graphs[N].append((nx.gnm_random_graph(N, (N//2)*0.2, seed=5434254), "graph_v8_r1"))
+        # graphs[N].append((nx.gnm_random_graph(N, (N//2)*0.4, seed=1264363), "graph_v8_r2"))
+        # graphs[N].append((nx.gnm_random_graph(N, (N//2)*0.6, seed=4280230), "graph_v8_r3"))
+        # graphs[N].append((nx.gnm_random_graph(N, (N//2)*0.8, seed=1456479), "graph_v8_r4"))
+        # graphs[N].append((nx.gnm_random_graph(N, (N//2)*0.9, seed=6895675), "graph_v8_r5"))
 
         N = 9
         graphs[N] = []
