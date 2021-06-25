@@ -4,7 +4,7 @@ import pandas
 import multiprocessing
 from worker_process import worker
 
-PATH = "graph_experiments/dwave_experiments.pickle"
+PATH = "graph_experiments/dwave_all.pickle"
 pandas.set_option('display.max_rows', 500)
 pandas.set_option('display.max_columns', 500)
 pandas.set_option('display.width', 1000)

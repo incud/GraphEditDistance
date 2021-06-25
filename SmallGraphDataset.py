@@ -6,60 +6,76 @@ class SmallGraphDataset:
     def __init__(self):
         graphs = {}
 
-        ## 3 vertici
-        #N = 3
-        #graphs[N] = []
-        #graphs[N].append((nx.empty_graph(N), "empty"))
-        #graphs[N].append((self.create_graph([(0, 1)], [2]), "segment"))
-        #graphs[N].append((nx.complete_graph(N), "complete"))
-#
-        ## 4 vertici
-        #N = 4
-        #graphs[N] = []
-        #graphs[N].append((nx.empty_graph(N), "empty"))
-        #graphs[N].append((self.create_graph([(0, 1)], [2, 3]), "segment"))
-        #graphs[N].append((self.create_graph([(0, 1), (1, 2)], [3]), "angle"))
-        #graphs[N].append((nx.Graph([(0, 1), (1, 2), (2, 3)]), "U"))
-        #graphs[N].append((nx.cycle_graph(N), "cycle"))
-        #graphs[N].append((self.create_graph([(0, 1), (1, 2), (2, 0)], [3]), "triangle"))
-        #graphs[N].append((nx.star_graph(N-1), "star"))
-        #graphs[N].append((nx.complete_graph(N), "complete"))
-#
-        ## 5 vertici
-        #N = 5
-        #graphs[N] = []
-        #graphs[N].append((nx.empty_graph(N), "empty"))
-        #graphs[N].append((nx.cycle_graph(N), "cycle"))
-        #graphs[N].append((nx.star_graph(N-1), "star"))
-        #graphs[N].append((nx.complete_graph(N), "complete"))
-        #graphs[N].append((nx.gnm_random_graph(N, 1, seed=12), "random1-1"))
-        #graphs[N].append((nx.gnm_random_graph(N, 2, seed=34), "random2-1"))
-        #graphs[N].append((nx.gnm_random_graph(N, 2, seed=56), "random2-2"))
-        #graphs[N].append((nx.gnm_random_graph(N, 3, seed=78), "random3-1"))
-        #graphs[N].append((nx.gnm_random_graph(N, 3, seed=11), "random3-2"))
-        #graphs[N].append((nx.gnm_random_graph(N, 3, seed=22), "random3-3"))
-        #graphs[N].append((nx.gnm_random_graph(N, 4, seed=33), "random4-1"))
-        #graphs[N].append((nx.gnm_random_graph(N, 4, seed=44), "random4-2"))
-        #graphs[N].append((nx.gnm_random_graph(N, 4, seed=55), "random4-3"))
-        #graphs[N].append((nx.gnm_random_graph(N, 4, seed=66), "random4-4"))
-        #graphs[N].append((nx.gnm_random_graph(N, 5, seed=77), "random5-1"))
-        #graphs[N].append((nx.gnm_random_graph(N, 5, seed=88), "random5-2"))
-        #graphs[N].append((nx.gnm_random_graph(N, 5, seed=99), "random5-3"))
-        #graphs[N].append((nx.gnm_random_graph(N, 5, seed=13), "random5-4"))
-        #graphs[N].append((nx.gnm_random_graph(N, 5, seed=14), "random5-5"))
-        #graphs[N].append((nx.gnm_random_graph(N, 8, seed=77), "random8-1"))
-        #graphs[N].append((nx.gnm_random_graph(N, 8, seed=88), "random8-2"))
-        #graphs[N].append((nx.gnm_random_graph(N, 8, seed=99), "random8-3"))
-        #graphs[N].append((nx.gnm_random_graph(N, 8, seed=13), "random8-4"))
-        #graphs[N].append((nx.gnm_random_graph(N, 8, seed=14), "random8-5"))
+        # 3 vertici
+        N = 3
+        graphs[N] = []
+        graphs[N].append((nx.empty_graph(N), "empty"))
+        graphs[N].append((self.create_graph([(0, 1)], [2]), "segment"))
+        graphs[N].append((nx.complete_graph(N), "complete"))
 
-        # N = 8
-        # graphs[N] = []
-        # graphs[N].append((nx.gnm_random_graph(N, (N//2)*0.2, seed=5434254), "graph_v8_r1"))
-        # graphs[N].append((nx.gnm_random_graph(N, (N//2)*0.4, seed=1264363), "graph_v8_r2"))
-        # graphs[N].append((nx.gnm_random_graph(N, (N//2)*0.6, seed=4280230), "graph_v8_r3"))
-        # graphs[N].append((nx.gnm_random_graph(N, (N//2)*0.8, seed=1456479), "graph_v8_r4"))
-        # graphs[N].append((nx.gnm_random_graph(N, (N//2)*0.9, seed=6895675), "graph_v8_r5"))
+        # 4 vertici
+        N = 4
+        graphs[N] = []
+        graphs[N].append((nx.empty_graph(N), "empty"))
+        graphs[N].append((self.create_graph([(0, 1)], [2, 3]), "segment"))
+        graphs[N].append((self.create_graph([(0, 1), (1, 2)], [3]), "angle"))
+        graphs[N].append((nx.Graph([(0, 1), (1, 2), (2, 3)]), "U"))
+        graphs[N].append((nx.cycle_graph(N), "cycle"))
+        graphs[N].append((self.create_graph([(0, 1), (1, 2), (2, 0)], [3]), "triangle"))
+        graphs[N].append((nx.star_graph(N-1), "star"))
+        graphs[N].append((nx.complete_graph(N), "complete"))
+
+        # 5 vertici
+        N = 5
+        graphs[N] = []
+        graphs[N].append((nx.empty_graph(N), "empty"))
+        graphs[N].append((nx.cycle_graph(N), "cycle"))
+        graphs[N].append((nx.star_graph(N-1), "star"))
+        graphs[N].append((nx.complete_graph(N), "complete"))
+        graphs[N].append((nx.gnm_random_graph(N, 1, seed=12), "random1-1"))
+        graphs[N].append((nx.gnm_random_graph(N, 2, seed=34), "random2-1"))
+        graphs[N].append((nx.gnm_random_graph(N, 2, seed=56), "random2-2"))
+        graphs[N].append((nx.gnm_random_graph(N, 3, seed=78), "random3-1"))
+        graphs[N].append((nx.gnm_random_graph(N, 3, seed=11), "random3-2"))
+        graphs[N].append((nx.gnm_random_graph(N, 3, seed=22), "random3-3"))
+        graphs[N].append((nx.gnm_random_graph(N, 4, seed=33), "random4-1"))
+        graphs[N].append((nx.gnm_random_graph(N, 4, seed=44), "random4-2"))
+        graphs[N].append((nx.gnm_random_graph(N, 4, seed=55), "random4-3"))
+        graphs[N].append((nx.gnm_random_graph(N, 4, seed=66), "random4-4"))
+        graphs[N].append((nx.gnm_random_graph(N, 5, seed=77), "random5-1"))
+        graphs[N].append((nx.gnm_random_graph(N, 5, seed=88), "random5-2"))
+        graphs[N].append((nx.gnm_random_graph(N, 5, seed=99), "random5-3"))
+        graphs[N].append((nx.gnm_random_graph(N, 5, seed=13), "random5-4"))
+        graphs[N].append((nx.gnm_random_graph(N, 5, seed=14), "random5-5"))
+        graphs[N].append((nx.gnm_random_graph(N, 8, seed=77), "random8-1"))
+        graphs[N].append((nx.gnm_random_graph(N, 8, seed=88), "random8-2"))
+        graphs[N].append((nx.gnm_random_graph(N, 8, seed=99), "random8-3"))
+        graphs[N].append((nx.gnm_random_graph(N, 8, seed=13), "random8-4"))
+        graphs[N].append((nx.gnm_random_graph(N, 8, seed=14), "random8-5"))
+
+        N = 6
+        graphs[N] = []
+        graphs[N].append((nx.gnm_random_graph(N, (N // 2) * 0.2, seed=5434254), "graph_v6_r1"))
+        graphs[N].append((nx.gnm_random_graph(N, (N // 2) * 0.4, seed=1264363), "graph_v6_r2"))
+        graphs[N].append((nx.gnm_random_graph(N, (N // 2) * 0.6, seed=4280230), "graph_v6_r3"))
+        graphs[N].append((nx.gnm_random_graph(N, (N // 2) * 0.8, seed=1456479), "graph_v6_r4"))
+        graphs[N].append((nx.gnm_random_graph(N, (N // 2) * 0.9, seed=6895675), "graph_v6_r5"))
+
+        N = 7
+        graphs[N] = []
+        graphs[N].append((nx.gnm_random_graph(N, (N // 2) * 0.2, seed=5434254), "graph_v7_r1"))
+        graphs[N].append((nx.gnm_random_graph(N, (N // 2) * 0.4, seed=1264363), "graph_v7_r2"))
+        graphs[N].append((nx.gnm_random_graph(N, (N // 2) * 0.6, seed=4280230), "graph_v7_r3"))
+        graphs[N].append((nx.gnm_random_graph(N, (N // 2) * 0.8, seed=1456479), "graph_v7_r4"))
+        graphs[N].append((nx.gnm_random_graph(N, (N // 2) * 0.9, seed=6895675), "graph_v7_r5"))
+
+        N = 8
+        graphs[N] = []
+        graphs[N].append((nx.gnm_random_graph(N, (N // 2) * 0.2, seed=5434254), "graph_v8_r1"))
+        graphs[N].append((nx.gnm_random_graph(N, (N // 2) * 0.4, seed=1264363), "graph_v8_r2"))
+        graphs[N].append((nx.gnm_random_graph(N, (N // 2) * 0.6, seed=4280230), "graph_v8_r3"))
+        graphs[N].append((nx.gnm_random_graph(N, (N // 2) * 0.8, seed=1456479), "graph_v8_r4"))
+        graphs[N].append((nx.gnm_random_graph(N, (N // 2) * 0.9, seed=6895675), "graph_v8_r5"))
 
         N = 9
         graphs[N] = []
@@ -87,6 +103,12 @@ class SmallGraphDataset:
 
     def get_graph_object(self, v, i):
         return self.graphs[v][i][0]
+
+    def get_graph_object_by_name(self, v, name):
+        grs = self.graphs[v]
+        for graph_obj, graph_name in grs:
+            if graph_name == name:
+                return graph_obj
 
     def get_graph_name(self, v, i):
         return self.graphs[v][i][1]
