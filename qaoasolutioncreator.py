@@ -1,3 +1,6 @@
+import warnings
+warnings.filterwarnings("ignore")
+
 from os import path
 import pandas as pd
 from experimentcreator import generate_hamiltonian
@@ -12,10 +15,10 @@ from qiskit.optimization.applications.ising.common import sample_most_likely
 
 def generate_qaoa_dataframe(the_path):
     if path.exists(the_path):
-        print("generate_dwave_2000_dataframe: Loaded from file")
+        print("generate_qaoa_dataframe: Loaded from file")
         return pd.read_pickle(the_path)
     else:
-        columns = ["experiments", "start", "stop",
+        columns = ["experiment", "start", "end",
                    "best_sample", "best_energy", "best_energy_by_sample",
                    "p", "max_iter"]
         return pd.DataFrame(columns=columns)
@@ -66,7 +69,7 @@ def run_qaoa_experiment(experiment, queue, p, max_iter):
     qaoa = QAOA(operator, quantum_instance=simulator, optimizer=optimizer, p=p)
     result = qaoa.compute_minimum_eigenvalue()
     vector = sample_most_likely(result.eigenstate)
-    best_sample = vector_to_sample(vector)
+    best_sample = vector_to_sample(vector, map_names, variables)
     best_energy = bqm.energy(best_sample)
 
     row = {
@@ -77,3 +80,15 @@ def run_qaoa_experiment(experiment, queue, p, max_iter):
         "max_iter": max_iter
     }
     queue.put(row)
+
+
+def run_qaoa_p1(_exp, _queue):
+    run_qaoa_experiment(_exp, _queue, p=1, max_iter=1000)
+
+
+def run_qaoa_p3(_exp, _queue):
+    run_qaoa_experiment(_exp, _queue, p=3, max_iter=1000)
+
+
+def run_qaoa_p5(_exp, _queue):
+    run_qaoa_experiment(_exp, _queue, p=5, max_iter=1000)

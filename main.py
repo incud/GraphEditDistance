@@ -1,16 +1,22 @@
+import warnings
+warnings.filterwarnings("ignore")
+
 from graphcreator import generate_graph_dataframe
 from experimentcreator import generate_experiments_dataframe
 from dwavesolutioncreator import generate_dwave_dataframe, run_dwave_2000_experiment, run_dwave_advantage_experiment, run_dwave_leap_experiment
-from qaoasolutioncreator import generate_qaoa_dataframe, run_qaoa_experiment
+from qaoasolutioncreator import generate_qaoa_dataframe, run_qaoa_p1, run_qaoa_p3, run_qaoa_p5
 import multiprocessing
 from datetime import datetime
 
 
 def run_experiments(the_experiments_df, solver_function, solution_df, solution_path):
+    print("run_experiments: solution path is", solution_path)
     queue = multiprocessing.Queue()
 
-    for i, experiment in enumerate(the_experiments_df):
-        if solution_df["experiment"].contains(i):
+    for i, experiment in the_experiments_df.iterrows():
+        print(f"running experiments {i} having data {experiment.to_dict()} ...", end="")
+        if i in list(solution_df["experiment"]):
+            print("experiment already present")
             continue
 
         # fai partire il simulatore in un nuovo processo (pulizia memoria utilizzata ottimale)
@@ -24,9 +30,10 @@ def run_experiments(the_experiments_df, solver_function, solution_df, solution_p
         # salva il risultato sulla tabella
         solution_df.loc[len(solution_df)] = {"experiment": i, "start": start, "end": end, **result}
 
-        # ogni 10 fai il backup
-        if i % 10 == 0:
-            solution_df.to_pickle(solution_path)
+        # fai il backup
+        solution_df.to_pickle(solution_path)
+
+        print("|")
 
     # alla fine salva tutto
     solution_df.to_pickle(solution_path)
@@ -41,6 +48,8 @@ if __name__ == '__main__':
     EXPERIMENTS_PATH = "data/experiments.pickle"
     experiments_df = generate_experiments_dataframe(EXPERIMENTS_PATH, graph_df)
     experiments_df.to_pickle(EXPERIMENTS_PATH)
+    # choose a subset of experiments
+    experiments_df = experiments_df.iloc[:3, :]
     # dwave 2000
     DWAVE_2000_PATH = "data/dwave_2000_solutions.pickle"
     dwave_2000_df = generate_dwave_dataframe(DWAVE_2000_PATH)
@@ -60,9 +69,6 @@ if __name__ == '__main__':
     qaoa_1_df = generate_qaoa_dataframe(QAOA_1_PATH)
     qaoa_3_df = generate_qaoa_dataframe(QAOA_3_PATH)
     qaoa_5_df = generate_qaoa_dataframe(QAOA_5_PATH)
-    run_qaoa_p1 = lambda _exp, _queue: run_qaoa_experiment(_exp, _queue, p=1, max_iter=1000)
-    run_qaoa_p3 = lambda _exp, _queue: run_qaoa_experiment(_exp, _queue, p=3, max_iter=1000)
-    run_qaoa_p5 = lambda _exp, _queue: run_qaoa_experiment(_exp, _queue, p=5, max_iter=1000)
     run_experiments(experiments_df, run_qaoa_p1, qaoa_1_df, QAOA_1_PATH)
     run_experiments(experiments_df, run_qaoa_p3, qaoa_3_df, QAOA_3_PATH)
     run_experiments(experiments_df, run_qaoa_p5, qaoa_5_df, QAOA_5_PATH)

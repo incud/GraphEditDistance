@@ -1,3 +1,6 @@
+import warnings
+warnings.filterwarnings("ignore")
+
 from os import path
 import pandas as pd
 from experimentcreator import generate_hamiltonian
@@ -9,10 +12,10 @@ from greedy import SteepestDescentSolver
 
 def generate_dwave_dataframe(the_path):
     if path.exists(the_path):
-        print("generate_dwave_2000_dataframe: Loaded from file")
+        print("generate_dwave_dataframe: Loaded from file")
         return pd.read_pickle(the_path)
     else:
-        columns = ["experiments", "start", "stop",
+        columns = ["experiment", "start", "end",
                    "best_sample", "best_energy", "best_energy_by_sample",
                    "best_sample_pp", "best_energy_pp", "best_energy_by_sample_pp",
                    "num_source_variables", "num_target_variables", "max_chain_length", "chain_strength", "chain_break_method"]
