@@ -22,6 +22,40 @@ def generate_dwave_dataframe(the_path):
         return pd.DataFrame(columns=columns)
 
 
+def run_simulated_experiment(experiment, queue):
+
+    bqm = experiment["bqm"]
+    model = generate_hamiltonian(experiment["g1"], experiment["g2"], experiment["a"], experiment["b"]).compile()
+
+    import neal
+    sampler = neal.SimulatedAnnealingSampler()
+    sample_set = sampler.sample(bqm, num_reads=10000, answer_mode='raw', return_embedding=True)
+    decoded_samples = model.decode_sampleset(sample_set)
+    best_sample = min(decoded_samples, key=lambda x: x.energy)
+
+    # =========================================================================
+    # Post-processing: see https://docs.ocean.dwavesys.com/en/stable/examples/pp_greedy.html#pp-greedy
+    solver_greedy = SteepestDescentSolver()
+    sample_set_pp = solver_greedy.sample(bqm, initial_states=sample_set)
+    decoded_samples_pp = model.decode_sampleset(sample_set_pp)
+    best_sample_pp = min(decoded_samples_pp, key=lambda x: x.energy)
+
+    row = {
+            "best_sample": best_sample.sample,
+            "best_energy": best_sample.energy,
+            "best_energy_by_sample": bqm.energy(best_sample.sample),
+            "best_sample_pp": best_sample_pp.sample,
+            "best_energy_pp": best_sample_pp.energy,
+            "best_energy_by_sample_pp": bqm.energy(best_sample_pp.sample),
+            "num_source_variables": 0,
+            "num_target_variables": 0,
+            "max_chain_length": 0,
+            "chain_strength": 0,
+            "chain_break_method": 0
+    }
+    queue.put(row)
+
+
 def run_dwave_2000_experiment(the_experiment, queue):
     run_dwave_experiment(the_experiment, 'DW_2000Q_6', queue)
 
