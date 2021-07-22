@@ -7,7 +7,7 @@ from dwavesolutioncreator import generate_dwave_dataframe, run_dwave_2000_experi
 from qaoasolutioncreator import generate_qaoa_dataframe, run_qaoa_p1, run_qaoa_p3, run_qaoa_p5
 import multiprocessing
 from datetime import datetime
-
+import pandas
 
 def run_experiments(the_experiments_df, solver_function, solution_df, solution_path):
     print("run_experiments: solution path is", solution_path)
@@ -40,29 +40,34 @@ def run_experiments(the_experiments_df, solver_function, solution_df, solution_p
 
 
 if __name__ == '__main__':
+    pandas.set_option('display.max_rows', 500)
+    pandas.set_option('display.max_columns', 500)
+    pandas.set_option('display.width', 1000)
     # genera i grafi
     GRAPHS_PATH = "data/graphs.pickle"
     graph_df = generate_graph_dataframe(GRAPHS_PATH)
     graph_df.to_pickle(GRAPHS_PATH)
-    print(graph_df.iloc[:4])
     # genera gli esperimenti
     EXPERIMENTS_PATH = "data/experiments.pickle"
     experiments_df = generate_experiments_dataframe(EXPERIMENTS_PATH, graph_df)
     experiments_df.to_pickle(EXPERIMENTS_PATH)
     # choose a subset of experiments
-    experiments_df = experiments_df.iloc[:3, :]
+    experiments_df = experiments_df.iloc[:27, :]
     # simulated annealing
     SIM_PATH = "data/simulated_annealing_solutions.pickle"
     sim_df = generate_dwave_dataframe(SIM_PATH)
     run_experiments(experiments_df, run_simulated_experiment, sim_df, SIM_PATH)
 
-    sol= experiments_df.iloc[:3, -1]
-    print(sol)
-    sol_sim = sim_df.iloc[:3, 4]
-    print(sol_sim)
+    print(experiments_df.head(27))
+    print(sim_df.head(27)["best_energy"])
 
-    #Test Index e grafi:
-
+    #sol= experiments_df.iloc[:3, -1]
+    #print(sol)
+    #sol_sim = sim_df.iloc[:3, 4]
+    #print(sol_sim)
+    #
+    ##Test Index e grafi:
+    #
     #g1_index, g2_index = experiments_df.iloc[0]["g1_index"], experiments_df.iloc[0]["g2_index"]
     #print(f"Index g1:{g1_index} g2:{g2_index}")
     #g1_index, g2_index = experiments_df.iloc[1]["g1_index"], experiments_df.iloc[1]["g2_index"]
