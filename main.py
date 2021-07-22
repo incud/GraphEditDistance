@@ -51,26 +51,29 @@ if __name__ == '__main__':
     # choose a subset of experiments
     experiments_df = experiments_df.iloc[:3, :]
     # simulated annealing
+    SIM_PATH = "data/simulated_annealing_solutions.pickle"
+    sim_df = generate_dwave_dataframe(SIM_PATH)
+    run_experiments(experiments_df, run_simulated_experiment, sim_df, SIM_PATH)
     
-    # dwave 2000
-    DWAVE_2000_PATH = "data/dwave_2000_solutions.pickle"
-    dwave_2000_df = generate_dwave_dataframe(DWAVE_2000_PATH)
-    run_experiments(experiments_df, run_dwave_2000_experiment, dwave_2000_df, DWAVE_2000_PATH)
-    # dwave advantage
-    DWAVE_ADVANTAGE_PATH = "data/dwave_advantage_solutions.pickle"
-    dwave_advantage_df = generate_dwave_dataframe(DWAVE_ADVANTAGE_PATH)
-    run_experiments(experiments_df, run_dwave_advantage_experiment, dwave_advantage_df, DWAVE_ADVANTAGE_PATH)
-    # dwave leap
-    DWAVE_LEAP_PATH = "data/dwave_leap_solutions.pickle"
-    dwave_leap_df = generate_dwave_dataframe(DWAVE_LEAP_PATH)
-    run_experiments(experiments_df, run_dwave_leap_experiment, dwave_leap_df, DWAVE_LEAP_PATH)
-    # qaoa
-    QAOA_1_PATH = "data/qaoa_p1_solutions.pickle"
-    QAOA_3_PATH = "data/qaoa_p3_solutions.pickle"
-    QAOA_5_PATH = "data/qaoa_p5_solutions.pickle"
-    qaoa_1_df = generate_qaoa_dataframe(QAOA_1_PATH)
-    qaoa_3_df = generate_qaoa_dataframe(QAOA_3_PATH)
-    qaoa_5_df = generate_qaoa_dataframe(QAOA_5_PATH)
-    run_experiments(experiments_df, run_qaoa_p1, qaoa_1_df, QAOA_1_PATH)
-    run_experiments(experiments_df, run_qaoa_p3, qaoa_3_df, QAOA_3_PATH)
-    run_experiments(experiments_df, run_qaoa_p5, qaoa_5_df, QAOA_5_PATH)
+    ## dwave 2000
+    #DWAVE_2000_PATH = "data/dwave_2000_solutions.pickle"
+    #dwave_2000_df = generate_dwave_dataframe(DWAVE_2000_PATH)
+    #run_experiments(experiments_df, run_dwave_2000_experiment, dwave_2000_df, DWAVE_2000_PATH)
+    ## dwave advantage
+    #DWAVE_ADVANTAGE_PATH = "data/dwave_advantage_solutions.pickle"
+    #dwave_advantage_df = generate_dwave_dataframe(DWAVE_ADVANTAGE_PATH)
+    #run_experiments(experiments_df, run_dwave_advantage_experiment, dwave_advantage_df, DWAVE_ADVANTAGE_PATH)
+    ## dwave leap
+    #DWAVE_LEAP_PATH = "data/dwave_leap_solutions.pickle"
+    #dwave_leap_df = generate_dwave_dataframe(DWAVE_LEAP_PATH)
+    #run_experiments(experiments_df, run_dwave_leap_experiment, dwave_leap_df, DWAVE_LEAP_PATH)
+    ## qaoa
+    #QAOA_1_PATH = "data/qaoa_p1_solutions.pickle"
+    #QAOA_3_PATH = "data/qaoa_p3_solutions.pickle"
+    #QAOA_5_PATH = "data/qaoa_p5_solutions.pickle"
+    #qaoa_1_df = generate_qaoa_dataframe(QAOA_1_PATH)
+    #qaoa_3_df = generate_qaoa_dataframe(QAOA_3_PATH)
+    #qaoa_5_df = generate_qaoa_dataframe(QAOA_5_PATH)
+    #run_experiments(experiments_df, run_qaoa_p1, qaoa_1_df, QAOA_1_PATH)
+    #run_experiments(experiments_df, run_qaoa_p3, qaoa_3_df, QAOA_3_PATH)
+    #run_experiments(experiments_df, run_qaoa_p5, qaoa_5_df, QAOA_5_PATH)
