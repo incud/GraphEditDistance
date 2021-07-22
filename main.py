@@ -50,6 +50,8 @@ if __name__ == '__main__':
     experiments_df.to_pickle(EXPERIMENTS_PATH)
     # choose a subset of experiments
     experiments_df = experiments_df.iloc[:3, :]
+    # simulated annealing
+    
     # dwave 2000
     DWAVE_2000_PATH = "data/dwave_2000_solutions.pickle"
     dwave_2000_df = generate_dwave_dataframe(DWAVE_2000_PATH)
