@@ -59,7 +59,7 @@ if __name__ == '__main__':
     run_experiments(experiments_df, run_simulated_experiment, sim_df, SIM_PATH)
 
     print(experiments_df.head(27))
-    print(sim_df.head(27)["best_energy"])
+    print(sim_df[['best_energy','best_energy_by_sample']])
 
     #sol= experiments_df.iloc[:3, -1]
     #print(sol)
