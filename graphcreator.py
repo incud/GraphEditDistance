@@ -27,6 +27,7 @@ def generate_graph_dataframe(the_path):
         columns = ["vertices", "name", "p", "g"]
         the_df = pd.DataFrame(columns=columns)
         for vertices in [3, 4, 5, 6, 7, 8, 9]:
+
             for p in [0.1, 0.33, 0.66, 0.9]:
                 g = generate_graph(vertices, p)
                 row = {"vertices": vertices, "name": f"graph_{vertices}_{p}", "p": p, "g": g}

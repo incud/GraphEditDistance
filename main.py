@@ -3,7 +3,7 @@ warnings.filterwarnings("ignore")
 
 from graphcreator import generate_graph_dataframe
 from experimentcreator import generate_experiments_dataframe
-from dwavesolutioncreator import generate_dwave_dataframe, run_dwave_2000_experiment, run_dwave_advantage_experiment, run_dwave_leap_experiment
+from dwavesolutioncreator import generate_dwave_dataframe, run_dwave_2000_experiment, run_dwave_advantage_experiment, run_simulated_experiment, run_dwave_leap_experiment
 from qaoasolutioncreator import generate_qaoa_dataframe, run_qaoa_p1, run_qaoa_p3, run_qaoa_p5
 import multiprocessing
 from datetime import datetime
@@ -44,6 +44,7 @@ if __name__ == '__main__':
     GRAPHS_PATH = "data/graphs.pickle"
     graph_df = generate_graph_dataframe(GRAPHS_PATH)
     graph_df.to_pickle(GRAPHS_PATH)
+    print(graph_df.iloc[:4])
     # genera gli esperimenti
     EXPERIMENTS_PATH = "data/experiments.pickle"
     experiments_df = generate_experiments_dataframe(EXPERIMENTS_PATH, graph_df)
@@ -54,7 +55,29 @@ if __name__ == '__main__':
     SIM_PATH = "data/simulated_annealing_solutions.pickle"
     sim_df = generate_dwave_dataframe(SIM_PATH)
     run_experiments(experiments_df, run_simulated_experiment, sim_df, SIM_PATH)
-    
+
+    sol= experiments_df.iloc[:3, -1]
+    print(sol)
+    sol_sim = sim_df.iloc[:3, 4]
+    print(sol_sim)
+
+    #Test Index e grafi:
+
+    #g1_index, g2_index = experiments_df.iloc[0]["g1_index"], experiments_df.iloc[0]["g2_index"]
+    #print(f"Index g1:{g1_index} g2:{g2_index}")
+    #g1_index, g2_index = experiments_df.iloc[1]["g1_index"], experiments_df.iloc[1]["g2_index"]
+    #print(f"Index g1:{g1_index} g2:{g2_index}")
+    #g1_index, g2_index = experiments_df.iloc[2]["g1_index"], experiments_df.iloc[2]["g2_index"]
+    #print(f"Index g1:{g1_index} g2:{g2_index}")
+    #
+    #g1, g2 = experiments_df.iloc[0]["g1"], experiments_df.iloc[0]["g2"]
+    #print(f"ESP 1: G1 nodes: {g1.nodes()} G2 nodes: {g2.nodes()}, G1 edges: {g1.edges()} G2 edges: {g2.edges()}")
+    #g1, g2 = experiments_df.iloc[1]["g1"], experiments_df.iloc[1]["g2"]
+    #print(f"ESP 2: G1 nodes: {g1.nodes()} G2 nodes: {g2.nodes()}, G1 edges: {g1.edges()} G2 edges: {g2.edges()}")
+    #g1, g2 = experiments_df.iloc[2]["g1"], experiments_df.iloc[2]["g2"]
+    #print(f"ESP 3: G1 nodes: {g1.nodes()} G2 nodes: {g2.nodes()}, G1 edges: {g1.edges()} G2 edges: {g2.edges()}")
+
+
     ## dwave 2000
     #DWAVE_2000_PATH = "data/dwave_2000_solutions.pickle"
     #dwave_2000_df = generate_dwave_dataframe(DWAVE_2000_PATH)
