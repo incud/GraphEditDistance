@@ -70,3 +70,56 @@ def manager_process():
                         df.loc[len(df)] = row
 
                     df.to_pickle(PATH)
+
+
+
+
+
+
+
+
+
+
+
+
+import networkx as nx
+from pyqubo import Array
+
+g1 = nx.from_edgelist([(0, 1), (0, 2)])
+g2 = nx.from_edgelist([(0, 1), (0, 2), (1, 2)])
+symbols = Array.create('x', shape=(3, 3), vartype='BINARY')
+not_in_g1 = nx.complement(g1).edges
+in_g2 = g2.edges
+print(f"Not in G1={not_in_g1}")
+print(f"In G2={in_g2}")
+
+H = 0
+for (i, j) in not_in_g1:
+    for (u, v) in in_g2:
+        # per confrontare E1=(i,j) con E2=(u,v)
+        # devo fare x[i][u]*x[j][v] ed anche lo stesso termine con u,v invertiti
+        term = (symbols[i, u] * symbols[j, v] + symbols[i, v] * symbols[j, u])
+        print(f"Adding term {term}")
+        H += term
+print(H)
+
+model = H.compile()
+bqm = model.to_bqm()
+
+import neal
+sampler = neal.SimulatedAnnealingSampler()
+sample_set = sampler.sample(bqm, num_reads=10000, answer_mode='raw', return_embedding=True)
+decoded_samples = model.decode_sampleset(sample_set)
+best_sample = min(decoded_samples, key=lambda x: x.energy)
+
+the_sample_for_calculating_energy = best_sample.sample
+bqm.energy(the_sample_for_calculating_energy)
+
+
+
+
+
+
+
+
+

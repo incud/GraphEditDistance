@@ -19,10 +19,32 @@ def generate_hamiltonian(g1, g2, a, b):
         H_term = reduce(lambda h, t: h + t, symbols[:, node2], -1)  # (-1 + x_0_b + x_1_b + ... + x_n_b)
         H = H + (H_term) ** 2
     # soft constraint
-    H1 = sum([symbols[a, b] * symbols[c, d] for (a, b) in nx.complement(g1).edges for (c, d) in g2.edges])
-    H2 = sum([symbols[a, b] * symbols[c, d] for (a, b) in g1.edges for (c, d) in nx.complement(g2).edges])
+    H1 = 0
+    for e in g1.edges:
+        H1 += generate_edge_predicate(symbols, e, g2)
+    H2 = 0
+    for e in g2.edges:
+        H2 += generate_edge_predicate(symbols, e, g1)
+
     # compose the Hs
     return a * H + b * (H1 + H2)
+
+
+def generate_edge_predicate(x, edge, g):
+
+    term = 0
+    i, j = edge
+    for ip in g.nodes:
+        for jp in g.nodes:
+            e_ip_jp = g.has_edge(ip, jp)
+            if not e_ip_jp:
+                term += x[i][ip] * x[j][jp]
+            # term += x[i][ip] * x[j][jp] * (1 - e_ip_jp)
+    return term
+
+
+
+
 
 
 def generate_experiments_dataframe(the_path, the_graph_df):
