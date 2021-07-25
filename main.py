@@ -6,6 +6,7 @@ from experimentcreator import generate_experiments_dataframe
 from dwavesolutioncreator import generate_dwave_dataframe, run_dwave_2000_experiment, run_dwave_advantage_experiment, run_simulated_experiment, run_dwave_leap_experiment
 from qaoasolutioncreator import generate_qaoa_dataframe, run_qaoa_p1, run_qaoa_p3, run_qaoa_p5
 import multiprocessing
+import numpy as np
 from datetime import datetime
 import pandas
 
@@ -65,7 +66,16 @@ if __name__ == '__main__':
     #e = bqm.energy(sim_df.loc[6]['best_sample'])
     #print(experiments_df.loc[6]['exact_distance'], e/.1)
 
-    print(experiments_df)
+    #print(experiments_df)
+    for i in range(len(experiments_df)):
+        b = experiments_df.iloc[i]['b']
+        distance = experiments_df.iloc[i]['exact_distance']
+        energy = experiments_df.iloc[i]['bqm'].energy(sim_df.iloc[i]['best_sample'])
+        g1 = experiments_df.iloc[i]['g1']
+        g2 = experiments_df.iloc[i]['g2']
+        print((distance - energy/b) < 0.001, distance, energy/b, g1.edges(), g2.edges())
+        #print(np.abs(experiments_df.iloc[i]["exact_distance"] - ((1/experiments_df.iloc[i]["b"]) * sim_df.iloc[i]["best_energy_by_sample"])) < 0.001, experiments_df.iloc[i]["exact_distance"], sim_df.iloc[i]["best_energy_by_sample"])
+
     #print(sim_df[['best_energy','best_energy_by_sample']])
 
     #sol= experiments_df.iloc[:3, -1]
