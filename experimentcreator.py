@@ -81,17 +81,17 @@ def generate_hamiltonian(g1, g2, a, b):
     return a * H + b * (H1 + H2)
 
 def generate_edge_predicate(x, edge, g):
-    print(g.edges)
+    #print(g.edges)
     term = 0
     i, j = edge
     for ip in g.nodes:
         for jp in g.nodes:
-            print(f"i:{i}, j:{j}, ip: {ip}, jp:{jp}")
+            #print(f"i:{i}, j:{j}, ip: {ip}, jp:{jp}")
             e_ip_jp = g.has_edge(ip, jp)
-            print(f"{g.edges} has ({ip,jp}) : {e_ip_jp}")
+            #print(f"{g.edges} has ({ip,jp}) : {e_ip_jp}")
             if not e_ip_jp:
                 term += x[i][ip] * x[j][jp]
-                print(f"add term {x[i][ip]*x[j][jp]}")
+                #print(f"add term {x[i][ip]*x[j][jp]}")
             # term += x[i][ip] * x[j][jp] * (1 - e_ip_jp)
     return term
 

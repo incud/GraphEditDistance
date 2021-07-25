@@ -52,20 +52,20 @@ if __name__ == '__main__':
     experiments_df = generate_experiments_dataframe(EXPERIMENTS_PATH, graph_df)
     experiments_df.to_pickle(EXPERIMENTS_PATH)
     # choose a subset of experiments
-    experiments_df = experiments_df.iloc[:27, :]
+    #experiments_df = experiments_df.iloc[:27, :]
     # simulated annealing
     SIM_PATH = "data/simulated_annealing_solutions.pickle"
     sim_df = generate_dwave_dataframe(SIM_PATH)
     run_experiments(experiments_df, run_simulated_experiment, sim_df, SIM_PATH)
 
-    from experimentcreator import *
-    print("----------------------------TEST")
-    H = generate_hamiltonian(graph_df.loc[0]['g'], graph_df.loc[2]['g'], 1, 0.1)
-    bqm = H.compile().to_bqm()
-    e = bqm.energy(sim_df.loc[6]['best_sample'])
-    print(experiments_df.loc[6]['exact_distance'], e/.1)
+    #from experimentcreator import *
+    #print("----------------------------TEST")
+    #H = generate_hamiltonian(graph_df.loc[0]['g'], graph_df.loc[2]['g'], 1, 0.1)
+    #bqm = H.compile().to_bqm()
+    #e = bqm.energy(sim_df.loc[6]['best_sample'])
+    #print(experiments_df.loc[6]['exact_distance'], e/.1)
 
-    #print(experiments_df.head(27))
+    print(experiments_df)
     #print(sim_df[['best_energy','best_energy_by_sample']])
 
     #sol= experiments_df.iloc[:3, -1]
