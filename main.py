@@ -4,7 +4,7 @@ warnings.filterwarnings("ignore")
 from graphcreator import generate_graph_dataframe
 from experimentcreator import generate_experiments_dataframe
 from dwavesolutioncreator import generate_dwave_dataframe, run_dwave_2000_experiment, run_dwave_advantage_experiment, run_simulated_experiment, run_dwave_leap_experiment
-from qaoasolutioncreator import generate_qaoa_dataframe, run_qaoa_p1, run_qaoa_p3, run_qaoa_p5
+# from qaoasolutioncreator import generate_qaoa_dataframe, run_qaoa_p1, run_qaoa_p3, run_qaoa_p5
 import multiprocessing
 import numpy as np
 from datetime import datetime
@@ -15,9 +15,9 @@ def run_experiments(the_experiments_df, solver_function, solution_df, solution_p
     queue = multiprocessing.Queue()
 
     for i, experiment in the_experiments_df.iterrows():
-        #print(f"running experiments {i} having data {experiment.to_dict()} ...", end="")
+        print(f"running experiments {i} having data {experiment.to_dict()} ...", end="")
         if i in list(solution_df["experiment"]):
-            #print("experiment already present")
+            print("experiment already present")
             continue
 
         # fai partire il simulatore in un nuovo processo (pulizia memoria utilizzata ottimale)
@@ -66,32 +66,30 @@ if __name__ == '__main__':
     #e = bqm.energy(sim_df.loc[6]['best_sample'])
     #print(experiments_df.loc[6]['exact_distance'], e/.1)
 
-    experiments_df = experiments_df[experiments_df["vertices"] == 3]
+    # experiments_df = experiments_df[experiments_df["vertices"] == 3]
     print(experiments_df)
     for i in range(len(experiments_df)):
         b = experiments_df.iloc[i]['b']
         distance = experiments_df.iloc[i]['exact_distance']
         energy = experiments_df.iloc[i]['bqm'].energy(sim_df.iloc[i]['best_sample'])
-        g1 = experiments_df.iloc[i]['g1']
-        g2 = experiments_df.iloc[i]['g2']
-        print((distance - energy/b) < 0.001, distance, energy/b, g1.edges(), g2.edges())
+        print((distance - energy/b) < 0.001, distance, energy/b)
         #print(np.abs(experiments_df.iloc[i]["exact_distance"] - ((1/experiments_df.iloc[i]["b"]) * sim_df.iloc[i]["best_energy_by_sample"])) < 0.001, experiments_df.iloc[i]["exact_distance"], sim_df.iloc[i]["best_energy_by_sample"])
 
-    experiments_df = experiments_df[experiments_df["vertices"] == 3]
-    SIM_3_PATH = "data/simulated_annealing_solutions_3_nodes.pickle"
-    sim_3nodes_df = generate_dwave_dataframe(SIM_3_PATH)
-    run_experiments(experiments_df, run_simulated_experiment, sim_3nodes_df, SIM_3_PATH)
+    #experiments_df = experiments_df[experiments_df["vertices"] == 3]
+    #SIM_3_PATH = "data/simulated_annealing_solutions_3_nodes.pickle"
+    #sim_3nodes_df = generate_dwave_dataframe(SIM_3_PATH)
+    #run_experiments(experiments_df, run_simulated_experiment, sim_3nodes_df, SIM_3_PATH)
 
-    for i in range(len(experiments_df)):
-        b = experiments_df.iloc[i]['b']
-        distance = experiments_df.iloc[i]['exact_distance']
-        energy = experiments_df.iloc[i]['bqm'].energy(sim_3nodes_df.iloc[i]['best_sample'])
-        g1 = experiments_df.iloc[i]['g1']
-        g2 = experiments_df.iloc[i]['g2']
-        print((distance - energy/b) < 0.001, distance, energy/b, g1.edges(), g2.edges())
+    #for i in range(len(experiments_df)):
+    #    b = experiments_df.iloc[i]['b']
+    #    distance = experiments_df.iloc[i]['exact_distance']
+    #    energy = experiments_df.iloc[i]['bqm'].energy(sim_3nodes_df.iloc[i]['best_sample'])
+    #    g1 = experiments_df.iloc[i]['g1']
+    #    g2 = experiments_df.iloc[i]['g2']
+    #    print((distance - energy/b) < 0.001, distance, energy/b, g1.edges(), g2.edges())
 
-    for i in range ( len(sim_3nodes_df)):
-        print(sim_3nodes_df.iloc[i]['best_sample'], experiments_df.iloc[i]['bqm'].energy(sim_3nodes_df.iloc[i]['best_sample']), experiments_df.iloc[i]['exact_distance'])
+    #for i in range ( len(sim_3nodes_df)):
+    #    print(sim_3nodes_df.iloc[i]['best_sample'], experiments_df.iloc[i]['bqm'].energy(sim_3nodes_df.iloc[i]['best_sample']), experiments_df.iloc[i]['exact_distance'])
 
     #print(sim_df[['best_energy','best_energy_by_sample']])
 
