@@ -58,8 +58,15 @@ if __name__ == '__main__':
     sim_df = generate_dwave_dataframe(SIM_PATH)
     run_experiments(experiments_df, run_simulated_experiment, sim_df, SIM_PATH)
 
-    print(experiments_df.head(27))
-    print(sim_df[['best_energy','best_energy_by_sample']])
+    from experimentcreator import *
+    print("----------------------------TEST")
+    H = generate_hamiltonian(graph_df.loc[0]['g'], graph_df.loc[2]['g'], 1, 0.1)
+    bqm = H.compile().to_bqm()
+    e = bqm.energy(sim_df.loc[6]['best_sample'])
+    print(experiments_df.loc[6]['exact_distance'], e/.1)
+
+    #print(experiments_df.head(27))
+    #print(sim_df[['best_energy','best_energy_by_sample']])
 
     #sol= experiments_df.iloc[:3, -1]
     #print(sol)
