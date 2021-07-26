@@ -120,10 +120,10 @@ if __name__ == '__main__':
     # dwave_2000_df = generate_dwave_dataframe(DWAVE_2000_PATH)
     # run_experiments(experiments_df, run_dwave_2000_experiment, dwave_2000_df, DWAVE_2000_PATH)
 
-    # dwave advantage
-    DWAVE_ADVANTAGE_PATH = "data/dwave_advantage_solutions.pickle"
-    dwave_advantage_df = generate_dwave_dataframe(DWAVE_ADVANTAGE_PATH)
-    run_experiments(experiments_df, run_dwave_advantage_experiment, dwave_advantage_df, DWAVE_ADVANTAGE_PATH)
+    # # dwave advantage
+    # DWAVE_ADVANTAGE_PATH = "data/dwave_advantage_solutions.pickle"
+    # dwave_advantage_df = generate_dwave_dataframe(DWAVE_ADVANTAGE_PATH)
+    # run_experiments(experiments_df, run_dwave_advantage_experiment, dwave_advantage_df, DWAVE_ADVANTAGE_PATH)
 
     # dwave leap
     DWAVE_LEAP_PATH = "data/dwave_leap_solutions.pickle"
