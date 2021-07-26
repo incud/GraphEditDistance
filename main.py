@@ -115,18 +115,21 @@ if __name__ == '__main__':
     #print(f"ESP 3: G1 nodes: {g1.nodes()} G2 nodes: {g2.nodes()}, G1 edges: {g1.edges()} G2 edges: {g2.edges()}")
 
 
-    # dwave 2000
-    DWAVE_2000_PATH = "data/dwave_2000_solutions.pickle"
-    dwave_2000_df = generate_dwave_dataframe(DWAVE_2000_PATH)
-    run_experiments(experiments_df, run_dwave_2000_experiment, dwave_2000_df, DWAVE_2000_PATH)
-    ## dwave advantage
-    #DWAVE_ADVANTAGE_PATH = "data/dwave_advantage_solutions.pickle"
-    #dwave_advantage_df = generate_dwave_dataframe(DWAVE_ADVANTAGE_PATH)
-    #run_experiments(experiments_df, run_dwave_advantage_experiment, dwave_advantage_df, DWAVE_ADVANTAGE_PATH)
-    ## dwave leap
-    #DWAVE_LEAP_PATH = "data/dwave_leap_solutions.pickle"
-    #dwave_leap_df = generate_dwave_dataframe(DWAVE_LEAP_PATH)
-    #run_experiments(experiments_df, run_dwave_leap_experiment, dwave_leap_df, DWAVE_LEAP_PATH)
+    # dwave 2000 FATTO
+    # DWAVE_2000_PATH = "data/dwave_2000_solutions.pickle"
+    # dwave_2000_df = generate_dwave_dataframe(DWAVE_2000_PATH)
+    # run_experiments(experiments_df, run_dwave_2000_experiment, dwave_2000_df, DWAVE_2000_PATH)
+
+    # dwave advantage
+    DWAVE_ADVANTAGE_PATH = "data/dwave_advantage_solutions.pickle"
+    dwave_advantage_df = generate_dwave_dataframe(DWAVE_ADVANTAGE_PATH)
+    run_experiments(experiments_df, run_dwave_advantage_experiment, dwave_advantage_df, DWAVE_ADVANTAGE_PATH)
+
+    # dwave leap
+    DWAVE_LEAP_PATH = "data/dwave_leap_solutions.pickle"
+    dwave_leap_df = generate_dwave_dataframe(DWAVE_LEAP_PATH)
+    run_experiments(experiments_df, run_dwave_leap_experiment, dwave_leap_df, DWAVE_LEAP_PATH)
+
     ## qaoa
     #QAOA_1_PATH = "data/qaoa_p1_solutions.pickle"
     #QAOA_3_PATH = "data/qaoa_p3_solutions.pickle"
