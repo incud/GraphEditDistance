@@ -66,14 +66,14 @@ if __name__ == '__main__':
     #e = bqm.energy(sim_df.loc[6]['best_sample'])
     #print(experiments_df.loc[6]['exact_distance'], e/.1)
 
-    # experiments_df = experiments_df[experiments_df["vertices"] == 3]
-    print(experiments_df)
-    for i in range(len(experiments_df)):
-        b = experiments_df.iloc[i]['b']
-        distance = experiments_df.iloc[i]['exact_distance']
-        energy = experiments_df.iloc[i]['bqm'].energy(sim_df.iloc[i]['best_sample'])
-        print((distance - energy/b) < 0.001, distance, energy/b)
-        #print(np.abs(experiments_df.iloc[i]["exact_distance"] - ((1/experiments_df.iloc[i]["b"]) * sim_df.iloc[i]["best_energy_by_sample"])) < 0.001, experiments_df.iloc[i]["exact_distance"], sim_df.iloc[i]["best_energy_by_sample"])
+    # # experiments_df = experiments_df[experiments_df["vertices"] == 3]
+    # print(experiments_df)
+    # for i in range(len(experiments_df)):
+    #     b = experiments_df.iloc[i]['b']
+    #     distance = experiments_df.iloc[i]['exact_distance']
+    #     energy = experiments_df.iloc[i]['bqm'].energy(sim_df.iloc[i]['best_sample'])
+    #     print((distance - energy/b) < 0.001, distance, energy/b)
+    #     #print(np.abs(experiments_df.iloc[i]["exact_distance"] - ((1/experiments_df.iloc[i]["b"]) * sim_df.iloc[i]["best_energy_by_sample"])) < 0.001, experiments_df.iloc[i]["exact_distance"], sim_df.iloc[i]["best_energy_by_sample"])
 
     #experiments_df = experiments_df[experiments_df["vertices"] == 3]
     #SIM_3_PATH = "data/simulated_annealing_solutions_3_nodes.pickle"
@@ -115,10 +115,10 @@ if __name__ == '__main__':
     #print(f"ESP 3: G1 nodes: {g1.nodes()} G2 nodes: {g2.nodes()}, G1 edges: {g1.edges()} G2 edges: {g2.edges()}")
 
 
-    ## dwave 2000
-    #DWAVE_2000_PATH = "data/dwave_2000_solutions.pickle"
-    #dwave_2000_df = generate_dwave_dataframe(DWAVE_2000_PATH)
-    #run_experiments(experiments_df, run_dwave_2000_experiment, dwave_2000_df, DWAVE_2000_PATH)
+    # dwave 2000
+    DWAVE_2000_PATH = "data/dwave_2000_solutions.pickle"
+    dwave_2000_df = generate_dwave_dataframe(DWAVE_2000_PATH)
+    run_experiments(experiments_df, run_dwave_2000_experiment, dwave_2000_df, DWAVE_2000_PATH)
     ## dwave advantage
     #DWAVE_ADVANTAGE_PATH = "data/dwave_advantage_solutions.pickle"
     #dwave_advantage_df = generate_dwave_dataframe(DWAVE_ADVANTAGE_PATH)
