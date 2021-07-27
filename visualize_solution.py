@@ -9,6 +9,9 @@ import multiprocessing
 import numpy as np
 from datetime import datetime
 import pandas as pd
+import matplotlib.pyplot as plt
+
+import seaborn as sns
 
 pd.set_option('display.max_rows', 500)
 pd.set_option('display.max_columns', 10)
@@ -47,7 +50,7 @@ dwave_leap_sel_df = dwave_leap_df['best_energy_by_sample']
 results_df = pd.concat([experiments_df['vertices'], experiments_sel_df, sim_sel_df, padding_dwave_2000_sel_df, dwave_adv_sel_df, dwave_leap_sel_df],axis = 1)
 df_columns = ['vertices','exact_distance', 'best_energy_by_sample_sim', 'best_energy_by_sample_2000', 'best_energy_by_sample_adv', 'best_energy_by_sample_leap']
 results_df.columns = df_columns
-print(results_df)
+#print(results_df)
 
 for i in range(len(experiments_sel_df)):
     sim_sel_df.iloc[i] = sim_sel_df.iloc[i]/b_df.iloc[i]
@@ -58,4 +61,23 @@ for i in range(len(experiments_sel_df)):
 
 results_withB_df = pd.concat([experiments_df['vertices'], experiments_sel_df, sim_sel_df, padding_dwave_2000_sel_df, dwave_adv_sel_df, dwave_leap_sel_df],axis = 1)
 results_withB_df.columns = df_columns
-print(results_withB_df)
+
+diff_ged_sim = pd.DataFrame(columns=['difference'])
+for i in range(len(experiments_df)):
+    diff_ged_sim.loc[len(diff_ged_sim)] = (sim_sel_df.iloc[i] - experiments_sel_df.iloc[i])
+
+diff_ged_2000 = pd.DataFrame(columns=['difference'])
+for i in range(270):
+    diff_ged_2000.loc[len(diff_ged_2000)] = (dwave_2000_sel_df.iloc[i] - experiments_sel_df.iloc[i])
+
+diff_ged_adv = pd.DataFrame(columns=['difference'])
+for i in range(len(experiments_df)):
+    diff_ged_adv.loc[len(diff_ged_adv)] = (dwave_adv_sel_df.iloc[i] - experiments_sel_df.iloc[i])
+
+diff_ged_leap = pd.DataFrame(columns=['difference'])
+for i in range(len(experiments_df)):
+    diff_ged_leap.loc[len(diff_ged_leap)] = (dwave_leap_sel_df.iloc[i] - experiments_sel_df.iloc[i])
+
+#df = pd.concat([diff_ged_2000, dwave_2000_df['num_source_variables']], axis=1)
+
+#print(results_withB_df)
