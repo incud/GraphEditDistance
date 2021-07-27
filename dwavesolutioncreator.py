@@ -70,12 +70,16 @@ def run_dwave_2000_experiment_pm(the_experiment, queue):
     run_dwave_experiment(the_experiment, 'DW_2000Q_6', queue, long_time=False, pause_middle=True)
 
 
-def run_dwave_2000_experiment_lp_pm(the_experiment, queue):
-    run_dwave_experiment(the_experiment, 'DW_2000Q_6', queue, long_time=True, pause_middle=True)
-
-
 def run_dwave_advantage_experiment(the_experiment, queue, long_time=False, pause_middle=False):
     run_dwave_experiment(the_experiment, 'Advantage_system1.1', queue, long_time=long_time, pause_middle=pause_middle)
+
+
+def run_dwave_advantage_experiment_lp(the_experiment, queue):
+    run_dwave_experiment(the_experiment, 'Advantage_system1.1', queue, long_time=True, pause_middle=False)
+
+
+def run_dwave_advantage_experiment_pm(the_experiment, queue):
+    run_dwave_experiment(the_experiment, 'Advantage_system1.1', queue, long_time=False, pause_middle=True)
 
 
 def run_dwave_experiment(experiment, machine, queue, long_time=False, pause_middle=False):

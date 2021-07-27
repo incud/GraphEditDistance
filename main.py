@@ -134,9 +134,17 @@ if __name__ == '__main__':
     # dwave_1_df = generate_dwave_dataframe(DWAVE_2000_1_PATH)
     # run_experiments(experiments_df, run_dwave_2000_experiment_lp, dwave_1_df, DWAVE_2000_1_PATH)
 
-    DWAVE_2000_2_PATH = f"data/dwave_2000_solutions_PM.pickle"
-    dwave_2_df = generate_dwave_dataframe(DWAVE_2000_2_PATH)
-    run_experiments(experiments_df, run_dwave_2000_experiment_pm, dwave_2_df, DWAVE_2000_2_PATH)
+    # DWAVE_2000_2_PATH = f"data/dwave_2000_solutions_PM.pickle"
+    # dwave_2_df = generate_dwave_dataframe(DWAVE_2000_2_PATH)
+    # run_experiments(experiments_df, run_dwave_2000_experiment_pm, dwave_2_df, DWAVE_2000_2_PATH)
+
+    DWAVE_ADV_1_PATH = f"data/dwave_advantage_solutions_LP.pickle"
+    dwave_adv_1_df = generate_dwave_dataframe(DWAVE_ADV_1_PATH)
+    run_experiments(experiments_df, run_dwave_advantage_experiment_lp, dwave_adv_1_df, DWAVE_ADV_1_PATH)
+
+    DWAVE_ADV_2_PATH = f"data/dwave_advantage_solutions_PM.pickle"
+    dwave_adv_2_df = generate_dwave_dataframe(DWAVE_ADV_2_PATH)
+    run_experiments(experiments_df, run_dwave_advantage_experiment_pm, dwave_adv_2_df, DWAVE_ADV_2_PATH)
 
     ## qaoa
     #QAOA_1_PATH = "data/qaoa_p1_solutions.pickle"
