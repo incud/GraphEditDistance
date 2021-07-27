@@ -3,7 +3,7 @@ warnings.filterwarnings("ignore")
 
 from graphcreator import generate_graph_dataframe
 from experimentcreator import generate_experiments_dataframe
-from dwavesolutioncreator import generate_dwave_dataframe, run_dwave_2000_experiment, run_dwave_advantage_experiment, run_simulated_experiment, run_dwave_leap_experiment
+from dwavesolutioncreator import * # generate_dwave_dataframe, run_dwave_2000_experiment, run_dwave_advantage_experiment, run_simulated_experiment, run_dwave_leap_experiment
 # from qaoasolutioncreator import generate_qaoa_dataframe, run_qaoa_p1, run_qaoa_p3, run_qaoa_p5
 import multiprocessing
 import numpy as np
@@ -54,10 +54,10 @@ if __name__ == '__main__':
     experiments_df.to_pickle(EXPERIMENTS_PATH)
     # choose a subset of experiments
     #experiments_df = experiments_df.iloc[:27, :]
-    # simulated annealing
-    SIM_PATH = "data/simulated_annealing_solutions.pickle"
-    sim_df = generate_dwave_dataframe(SIM_PATH)
-    run_experiments(experiments_df, run_simulated_experiment, sim_df, SIM_PATH)
+    # # simulated annealing
+    # SIM_PATH = "data/simulated_annealing_solutions.pickle"
+    # sim_df = generate_dwave_dataframe(SIM_PATH)
+    # run_experiments(experiments_df, run_simulated_experiment, sim_df, SIM_PATH)
 
     #from experimentcreator import *
     #print("----------------------------TEST")
@@ -125,10 +125,18 @@ if __name__ == '__main__':
     # dwave_advantage_df = generate_dwave_dataframe(DWAVE_ADVANTAGE_PATH)
     # run_experiments(experiments_df, run_dwave_advantage_experiment, dwave_advantage_df, DWAVE_ADVANTAGE_PATH)
 
-    # dwave leap
-    DWAVE_LEAP_PATH = "data/dwave_leap_solutions.pickle"
-    dwave_leap_df = generate_dwave_dataframe(DWAVE_LEAP_PATH)
-    run_experiments(experiments_df, run_dwave_leap_experiment, dwave_leap_df, DWAVE_LEAP_PATH)
+    # # dwave leap
+    # DWAVE_LEAP_PATH = "data/dwave_leap_solutions.pickle"
+    # dwave_leap_df = generate_dwave_dataframe(DWAVE_LEAP_PATH)
+    # run_experiments(experiments_df, run_dwave_leap_experiment, dwave_leap_df, DWAVE_LEAP_PATH)
+
+    # DWAVE_2000_1_PATH = f"data/dwave_2000_solutions_LP.pickle"
+    # dwave_1_df = generate_dwave_dataframe(DWAVE_2000_1_PATH)
+    # run_experiments(experiments_df, run_dwave_2000_experiment_lp, dwave_1_df, DWAVE_2000_1_PATH)
+
+    DWAVE_2000_2_PATH = f"data/dwave_2000_solutions_PM.pickle"
+    dwave_2_df = generate_dwave_dataframe(DWAVE_2000_2_PATH)
+    run_experiments(experiments_df, run_dwave_2000_experiment_pm, dwave_2_df, DWAVE_2000_2_PATH)
 
     ## qaoa
     #QAOA_1_PATH = "data/qaoa_p1_solutions.pickle"

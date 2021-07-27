@@ -15,10 +15,12 @@ def generate_dwave_dataframe(the_path):
         print("generate_dwave_dataframe: Loaded from file")
         return pd.read_pickle(the_path)
     else:
+        print("generate_dwave_dataframe: Create")
         columns = ["experiment", "start", "end",
                    "best_sample", "best_energy", "best_energy_by_sample",
                    "best_sample_pp", "best_energy_pp", "best_energy_by_sample_pp",
-                   "num_source_variables", "num_target_variables", "max_chain_length", "chain_strength", "chain_break_method"]
+                   "num_source_variables", "num_target_variables", "max_chain_length", "chain_strength", "chain_break_method",
+                   "annealing_time", "annealing_schedule"]
         return pd.DataFrame(columns=columns)
 
 
@@ -56,21 +58,47 @@ def run_simulated_experiment(experiment, queue):
     queue.put(row)
 
 
-def run_dwave_2000_experiment(the_experiment, queue):
-    run_dwave_experiment(the_experiment, 'DW_2000Q_6', queue)
+def run_dwave_2000_experiment(the_experiment, queue, long_time=False, pause_middle=False):
+    run_dwave_experiment(the_experiment, 'DW_2000Q_6', queue, long_time=long_time, pause_middle=pause_middle)
 
 
-def run_dwave_advantage_experiment(the_experiment, queue):
-    run_dwave_experiment(the_experiment, 'Advantage_system1.1', queue)
+def run_dwave_2000_experiment_lp(the_experiment, queue):
+    run_dwave_experiment(the_experiment, 'DW_2000Q_6', queue, long_time=True, pause_middle=False)
 
 
-def run_dwave_experiment(experiment, machine, queue):
+def run_dwave_2000_experiment_pm(the_experiment, queue):
+    run_dwave_experiment(the_experiment, 'DW_2000Q_6', queue, long_time=False, pause_middle=True)
+
+
+def run_dwave_2000_experiment_lp_pm(the_experiment, queue):
+    run_dwave_experiment(the_experiment, 'DW_2000Q_6', queue, long_time=True, pause_middle=True)
+
+
+def run_dwave_advantage_experiment(the_experiment, queue, long_time=False, pause_middle=False):
+    run_dwave_experiment(the_experiment, 'Advantage_system1.1', queue, long_time=long_time, pause_middle=pause_middle)
+
+
+def run_dwave_experiment(experiment, machine, queue, long_time=False, pause_middle=False):
 
     bqm = experiment["bqm"]
     model = generate_hamiltonian(experiment["g1"], experiment["g2"], experiment["a"], experiment["b"]).compile()
 
-    sampler = EmbeddingComposite(DWaveSampler(solver=machine))
-    sample_set = sampler.sample(bqm, num_reads=1000, answer_mode='raw', return_embedding=True)
+    qpu = DWaveSampler(solver=machine)
+    sampler = EmbeddingComposite(qpu)
+
+    annealer_props = {}
+    annealing_time = 500 if long_time else qpu.properties["default_annealing_time"]
+    anneal_schedule = [[0.0, 0.0], [5, 0.45], [99, 0.45], [100, 1.0]] if pause_middle else [[0.0, 0.0], [100, 1.0]]
+
+    # https://docs.dwavesys.com/docs/latest/_downloads/342c755e402be92be6fa87fb48190868/09-1107B-E_DeveloperGuideTiming.pdf
+    # 4.4.1 Upper Limit on User-Specifed Timing-Related Parameters
+    if long_time:
+        annealer_props["annealing_time"] = annealing_time
+    elif pause_middle:
+        annealer_props["anneal_schedule"] = anneal_schedule
+
+    print(f"Machine={machine} Props={annealer_props}")
+    sample_set = sampler.sample(bqm, num_reads=1000, answer_mode='raw', return_embedding=True, **annealer_props)
     decoded_samples = model.decode_sampleset(sample_set)
     best_sample = min(decoded_samples, key=lambda x: x.energy)
 
@@ -116,7 +144,9 @@ def run_dwave_experiment(experiment, machine, queue):
             "num_target_variables": num_target_variables,
             "max_chain_length": max_chain_length,
             "chain_strength": chain_strength,
-            "chain_break_method": chain_break_method
+            "chain_break_method": chain_break_method,
+            "annealing_time": annealing_time,
+            "annealing_schedule": annealer_props.get("anneal_schedule", None)
     }
     queue.put(row)
 
