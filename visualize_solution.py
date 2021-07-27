@@ -13,6 +13,7 @@ import pandas as pd
 pd.set_option('display.max_rows', 500)
 pd.set_option('display.max_columns', 10)
 pd.set_option('display.width', 1000)
+#pd.options.display.float_format = "{:,.2f}".format
 
 
 #PATHS
@@ -34,15 +35,27 @@ experiments_sel_df = experiments_df['exact_distance']
 b_df = experiments_df['b']
 sim_sel_df = sim_df['best_energy_by_sample']
 dwave_2000_sel_df = dwave_2000_df['best_energy_by_sample']
+
 padding_dwave_2000_sel_df = dwave_2000_sel_df
+for i in range(len(dwave_2000_sel_df), len(experiments_sel_df)):
+    padding_dwave_2000_sel_df.loc[len(padding_dwave_2000_sel_df)] = None
+
 dwave_adv_sel_df = dwave_adv_df['best_energy_by_sample']
 dwave_leap_sel_df = dwave_leap_df['best_energy_by_sample']
 
-print(b_df)
-#for i in range(len(experiments_sel_df)):
-#   print(experiments_sel_df.iloc[i], sim_sel_df.iloc[i], dwave_2000_sel_df.iloc[i], dwave_adv_sel_df.iloc[i], dwave_leap_sel_df.iloc[i])
 
-for i in range(len(dwave_2000_sel_df), len(experiments_sel_df)):
-    padding_dwave_2000_sel_df.loc[len(padding_dwave_2000_sel_df)] = None
-results_df = pd.concat([experiments_sel_df, sim_sel_df, padding_dwave_2000_sel_df, dwave_adv_sel_df, dwave_leap_sel_df],axis = 1)
+results_df = pd.concat([experiments_df['vertices'], experiments_sel_df, sim_sel_df, padding_dwave_2000_sel_df, dwave_adv_sel_df, dwave_leap_sel_df],axis = 1)
+df_columns = ['vertices','exact_distance', 'best_energy_by_sample_sim', 'best_energy_by_sample_2000', 'best_energy_by_sample_adv', 'best_energy_by_sample_leap']
+results_df.columns = df_columns
 print(results_df)
+
+for i in range(len(experiments_sel_df)):
+    sim_sel_df.iloc[i] = sim_sel_df.iloc[i]/b_df.iloc[i]
+    if padding_dwave_2000_sel_df.iloc[i] != None:
+        padding_dwave_2000_sel_df.iloc[i] = padding_dwave_2000_sel_df.iloc[i]/b_df.iloc[i]
+    dwave_adv_sel_df.iloc[i] = dwave_adv_sel_df.iloc[i]/b_df.iloc[i]
+    dwave_leap_sel_df.iloc[i] = dwave_leap_sel_df.iloc[i]/b_df.iloc[i]
+
+results_withB_df = pd.concat([experiments_df['vertices'], experiments_sel_df, sim_sel_df, padding_dwave_2000_sel_df, dwave_adv_sel_df, dwave_leap_sel_df],axis = 1)
+results_withB_df.columns = df_columns
+print(results_withB_df)
