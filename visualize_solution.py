@@ -86,6 +86,9 @@ dwave_leap_sel_df = dwave_leap_df['best_energy_by_sample']
 results_NOB_df = pd.read_pickle("data/ALL_best_energy_by_sample_NO_B.pickle")
 results_WITHB_df = pd.read_pickle("data/ALL_best_energy_by_sample_WITH_B.pickle")
 
+variables = [9, 16, 25, 36, 49, 64, 81]
+vertices = [3, 4, 5, 6, 7, 8, 9]
+
 #diff_ged_sim = pd.DataFrame(columns=['difference'])
 #for i in range(len(experiments_df)):
 #    diff_ged_sim.loc[len(diff_ged_sim)] = (sim_sel_df.iloc[i] - experiments_sel_df.iloc[i])
