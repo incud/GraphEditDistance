@@ -65,7 +65,7 @@ dwave_leap_sel_df = dwave_leap_df['best_energy_by_sample']
 
 
 #results_df = pd.concat([experiments_df['vertices'], experiments_sel_df, sim_sel_df, padding_dwave_2000_sel_df, padding_dwave_2000_lp_sel_df, padding_dwave_2000_pm_sel_df, dwave_adv_sel_df, dwave_adv_lp_sel_df, dwave_adv_pm_sel_df, dwave_leap_sel_df], axis = 1)
-#df_columns = ['vertices','GED', 'BEBS_sim', 'BEBS_2000', 'BEBS_2000_lp', 'BEBS_2000_pm', 'BEBS_adv', 'BEBS_adv_lp', 'BEBS_adv_pm', 'BEBS_leap']
+#df_columns = ['vertices','GED', 'BEBS_sim', 'BEBS_2000', 'BEBS_2000_lt', 'BEBS_2000_pm', 'BEBS_adv', 'BEBS_adv_lt', 'BEBS_adv_pm', 'BEBS_leap']
 #results_df.columns = df_columns
 ##print(results_df)
 #
