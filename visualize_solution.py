@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 pd.set_option('display.max_rows', 500)
-pd.set_option('display.max_columns', 10)
+pd.set_option('display.max_columns', 20)
 pd.set_option('display.width', 1000)
 pd.options.display.float_format = "{:,.2f}".format
 
@@ -108,20 +108,20 @@ v_9_b1 = v_9[v_9['b'] == 0.1].drop('b', axis=1)
 v_9_b2 = v_9[v_9['b'] == 0.05].drop('b', axis=1)
 v_9_b3 = v_9[v_9['b'] == 0.01].drop('b', axis=1)
 
-#columns = ['vertices','simM','simV', '2000M','2000V', '2000ltM', '2000ltV', '2000pmM', '2000pmV', 'advM', 'advV', 'advltM', 'advltV', 'advpmM', 'advpmV', 'leapM', 'leapV']
-#mean_var_df = pd.DataFrame(columns = columns)
-#
-#for v in vertices:
-#    row = {'vertices': v,'simM':diff_df[diff_df['vertices'] == v]['GED_vs_sim'].mean(),'simV':diff_df[diff_df['vertices'] == v]['GED_vs_sim'].var(),
-#           '2000M':diff_df[diff_df['vertices'] == v]['GED_vs_2000'].mean(),'2000V':diff_df[diff_df['vertices'] == v]['GED_vs_2000'].var(),
-#           '2000ltM':diff_df[diff_df['vertices'] == v]['GED_vs_2000_lt'].mean(), '2000ltV':diff_df[diff_df['vertices'] == v]['GED_vs_2000_lt'].var(),
-#           '2000pmM':diff_df[diff_df['vertices'] == v]['GED_vs_2000_pm'].mean(), '2000pmV':diff_df[diff_df['vertices'] == v]['GED_vs_2000_pm'].var(),
-#           'advM':diff_df[diff_df['vertices'] == v]['GED_vs_adv'].mean(), 'advV':diff_df[diff_df['vertices'] == v]['GED_vs_adv'].var(),
-#           'advltM':diff_df[diff_df['vertices'] == v]['GED_vs_adv_lt'].mean(), 'advltV':diff_df[diff_df['vertices'] == v]['GED_vs_adv_lt'].var(),
-#           'advpmM':diff_df[diff_df['vertices'] == v]['GED_vs_adv_pm'].mean(), 'advpmV':diff_df[diff_df['vertices'] == v]['GED_vs_adv_pm'].var(),
-#           'leapM':diff_df[diff_df['vertices'] == v]['GED_vs_leap'].mean(), 'leapV':diff_df[diff_df['vertices'] == v]['GED_vs_leap'].var()}
-#    mean_var_df.loc[len(mean_var_df)] = row
-#
+columns = ['vertices','simM','simS', '2000M','2000S', '2000ltM', '2000ltS', '2000pmM', '2000pmS', 'advM', 'advS', 'advltM', 'advltS', 'advpmM', 'advpmS', 'leapM', 'leapS']
+mean_var_df = pd.DataFrame(columns = columns)
+
+for v in vertices:
+    row = {'vertices': v,'simM':diff_df[diff_df['vertices'] == v]['GED_vs_sim'].mean(),'simS':diff_df[diff_df['vertices'] == v]['GED_vs_sim'].std(),
+           '2000M':diff_df[diff_df['vertices'] == v]['GED_vs_2000'].mean(),'2000S':diff_df[diff_df['vertices'] == v]['GED_vs_2000'].std(),
+           '2000ltM':diff_df[diff_df['vertices'] == v]['GED_vs_2000_lt'].mean(), '2000ltS':diff_df[diff_df['vertices'] == v]['GED_vs_2000_lt'].std(),
+           '2000pmM':diff_df[diff_df['vertices'] == v]['GED_vs_2000_pm'].mean(), '2000pmS':diff_df[diff_df['vertices'] == v]['GED_vs_2000_pm'].std(),
+           'advM':diff_df[diff_df['vertices'] == v]['GED_vs_adv'].mean(), 'advS':diff_df[diff_df['vertices'] == v]['GED_vs_adv'].std(),
+           'advltM':diff_df[diff_df['vertices'] == v]['GED_vs_adv_lt'].mean(), 'advltS':diff_df[diff_df['vertices'] == v]['GED_vs_adv_lt'].std(),
+           'advpmM':diff_df[diff_df['vertices'] == v]['GED_vs_adv_pm'].mean(), 'advpmS':diff_df[diff_df['vertices'] == v]['GED_vs_adv_pm'].std(),
+           'leapM':diff_df[diff_df['vertices'] == v]['GED_vs_leap'].mean(), 'leapS':diff_df[diff_df['vertices'] == v]['GED_vs_leap'].std()}
+    mean_var_df.loc[len(mean_var_df)] = row
+
 #diff_df = pd.concat([experiments_df['vertices'], experiments_df['b'], diff_ged_sim, diff_ged_2000, diff_ged_2000_lp, diff_ged_2000_pm, diff_ged_adv, diff_ged_adv_lp, diff_ged_adv_pm, diff_ged_leap], axis=1)#results_df = pd.concat([experiments_df['vertices'], experiments_sel_df, sim_sel_df, padding_dwave_2000_sel_df, padding_dwave_2000_lp_sel_df, padding_dwave_2000_pm_sel_df, dwave_adv_sel_df, dwave_adv_lp_sel_df, dwave_adv_pm_sel_df, dwave_leap_sel_df], axis = 1)
 #df_columns = ['vertices','GED', 'BEBS_sim', 'BEBS_2000', 'BEBS_2000_lt', 'BEBS_2000_pm', 'BEBS_adv', 'BEBS_adv_lt', 'BEBS_adv_pm', 'BEBS_leap']
 #results_df.columns = df_columns
