@@ -16,7 +16,7 @@ import seaborn as sns
 pd.set_option('display.max_rows', 500)
 pd.set_option('display.max_columns', 10)
 pd.set_option('display.width', 1000)
-#pd.options.display.float_format = "{:,.2f}".format
+pd.options.display.float_format = "{:,.2f}".format
 
 
 #PATHS
@@ -63,8 +63,66 @@ dwave_adv_lp_sel_df = dwave_adv_lp_df['best_energy_by_sample']
 dwave_adv_pm_sel_df = dwave_adv_pm_df['best_energy_by_sample']
 dwave_leap_sel_df = dwave_leap_df['best_energy_by_sample']
 
+results_NOB_df = pd.read_pickle("data/ALL_best_energy_by_sample_NO_B.pickle")
+results_WITHB_df = pd.read_pickle("data/ALL_best_energy_by_sample_WITH_B.pickle")
 
-#results_df = pd.concat([experiments_df['vertices'], experiments_sel_df, sim_sel_df, padding_dwave_2000_sel_df, padding_dwave_2000_lp_sel_df, padding_dwave_2000_pm_sel_df, dwave_adv_sel_df, dwave_adv_lp_sel_df, dwave_adv_pm_sel_df, dwave_leap_sel_df], axis = 1)
+variables = [9, 16, 25, 36, 49, 64, 81]
+vertices = [3, 4, 5, 6, 7, 8, 9]
+
+diff_df = pd.read_pickle("data/difference_value_simple.pickle")
+
+v_3 = diff_df[diff_df['vertices'] == 3].drop('vertices', axis=1)
+v_4 = diff_df[diff_df['vertices'] == 4].drop('vertices', axis=1)
+v_5 = diff_df[diff_df['vertices'] == 5].drop('vertices', axis=1)
+v_6 = diff_df[diff_df['vertices'] == 6].drop('vertices', axis=1)
+v_7 = diff_df[diff_df['vertices'] == 7].drop('vertices', axis=1)
+v_8 = diff_df[diff_df['vertices'] == 8].drop('vertices', axis=1)
+v_9 = diff_df[diff_df['vertices'] == 9].drop('vertices', axis=1)
+
+
+v_3_b1 = v_3[v_3['b'] == 0.1].drop('b', axis=1)
+v_3_b2 = v_3[v_3['b'] == 0.05].drop('b', axis=1)
+v_3_b3 = v_3[v_3['b'] == 0.01].drop('b', axis=1)
+
+v_4_b1 = v_4[v_4['b'] == 0.1].drop('b', axis=1)
+v_4_b2 = v_4[v_4['b'] == 0.05].drop('b', axis=1)
+v_4_b3 = v_4[v_4['b'] == 0.01].drop('b', axis=1)
+
+v_5_b1 = v_5[v_5['b'] == 0.1].drop('b', axis=1)
+v_5_b2 = v_5[v_5['b'] == 0.05].drop('b', axis=1)
+v_5_b3 = v_5[v_5['b'] == 0.01].drop('b', axis=1)
+
+v_6_b1 = v_6[v_6['b'] == 0.1].drop('b', axis=1)
+v_6_b2 = v_6[v_6['b'] == 0.05].drop('b', axis=1)
+v_6_b3 = v_6[v_6['b'] == 0.01].drop('b', axis=1)
+
+v_7_b1 = v_7[v_7['b'] == 0.1].drop('b', axis=1)
+v_7_b2 = v_7[v_7['b'] == 0.05].drop('b', axis=1)
+v_7_b3 = v_7[v_7['b'] == 0.01].drop('b', axis=1)
+
+v_8_b1 = v_8[v_8['b'] == 0.1].drop('b', axis=1)
+v_8_b2 = v_8[v_8['b'] == 0.05].drop('b', axis=1)
+v_8_b3 = v_8[v_8['b'] == 0.01].drop('b', axis=1)
+
+v_9_b1 = v_9[v_9['b'] == 0.1].drop('b', axis=1)
+v_9_b2 = v_9[v_9['b'] == 0.05].drop('b', axis=1)
+v_9_b3 = v_9[v_9['b'] == 0.01].drop('b', axis=1)
+
+#columns = ['vertices','simM','simV', '2000M','2000V', '2000ltM', '2000ltV', '2000pmM', '2000pmV', 'advM', 'advV', 'advltM', 'advltV', 'advpmM', 'advpmV', 'leapM', 'leapV']
+#mean_var_df = pd.DataFrame(columns = columns)
+#
+#for v in vertices:
+#    row = {'vertices': v,'simM':diff_df[diff_df['vertices'] == v]['GED_vs_sim'].mean(),'simV':diff_df[diff_df['vertices'] == v]['GED_vs_sim'].var(),
+#           '2000M':diff_df[diff_df['vertices'] == v]['GED_vs_2000'].mean(),'2000V':diff_df[diff_df['vertices'] == v]['GED_vs_2000'].var(),
+#           '2000ltM':diff_df[diff_df['vertices'] == v]['GED_vs_2000_lt'].mean(), '2000ltV':diff_df[diff_df['vertices'] == v]['GED_vs_2000_lt'].var(),
+#           '2000pmM':diff_df[diff_df['vertices'] == v]['GED_vs_2000_pm'].mean(), '2000pmV':diff_df[diff_df['vertices'] == v]['GED_vs_2000_pm'].var(),
+#           'advM':diff_df[diff_df['vertices'] == v]['GED_vs_adv'].mean(), 'advV':diff_df[diff_df['vertices'] == v]['GED_vs_adv'].var(),
+#           'advltM':diff_df[diff_df['vertices'] == v]['GED_vs_adv_lt'].mean(), 'advltV':diff_df[diff_df['vertices'] == v]['GED_vs_adv_lt'].var(),
+#           'advpmM':diff_df[diff_df['vertices'] == v]['GED_vs_adv_pm'].mean(), 'advpmV':diff_df[diff_df['vertices'] == v]['GED_vs_adv_pm'].var(),
+#           'leapM':diff_df[diff_df['vertices'] == v]['GED_vs_leap'].mean(), 'leapV':diff_df[diff_df['vertices'] == v]['GED_vs_leap'].var()}
+#    mean_var_df.loc[len(mean_var_df)] = row
+#
+#diff_df = pd.concat([experiments_df['vertices'], experiments_df['b'], diff_ged_sim, diff_ged_2000, diff_ged_2000_lp, diff_ged_2000_pm, diff_ged_adv, diff_ged_adv_lp, diff_ged_adv_pm, diff_ged_leap], axis=1)#results_df = pd.concat([experiments_df['vertices'], experiments_sel_df, sim_sel_df, padding_dwave_2000_sel_df, padding_dwave_2000_lp_sel_df, padding_dwave_2000_pm_sel_df, dwave_adv_sel_df, dwave_adv_lp_sel_df, dwave_adv_pm_sel_df, dwave_leap_sel_df], axis = 1)
 #df_columns = ['vertices','GED', 'BEBS_sim', 'BEBS_2000', 'BEBS_2000_lt', 'BEBS_2000_pm', 'BEBS_adv', 'BEBS_adv_lt', 'BEBS_adv_pm', 'BEBS_leap']
 #results_df.columns = df_columns
 ##print(results_df)
@@ -82,29 +140,83 @@ dwave_leap_sel_df = dwave_leap_df['best_energy_by_sample']
 #
 #results_withB_df = pd.concat([experiments_df['vertices'], experiments_sel_df, sim_sel_df, padding_dwave_2000_sel_df, padding_dwave_2000_lp_sel_df, padding_dwave_2000_pm_sel_df, dwave_adv_sel_df, dwave_adv_lp_sel_df, dwave_adv_pm_sel_df, dwave_leap_sel_df],axis = 1)
 #results_withB_df.columns = df_columns
-
-results_NOB_df = pd.read_pickle("data/ALL_best_energy_by_sample_NO_B.pickle")
-results_WITHB_df = pd.read_pickle("data/ALL_best_energy_by_sample_WITH_B.pickle")
-
-variables = [9, 16, 25, 36, 49, 64, 81]
-vertices = [3, 4, 5, 6, 7, 8, 9]
-
+#
+#results_NOB_df = pd.read_pickle("data/ALL_best_energy_by_sample_NO_B.pickle")
+#results_WITHB_df = pd.read_pickle("data/ALL_best_energy_by_sample_WITH_B.pickle")
+#
+#variables = [9, 16, 25, 36, 49, 64, 81]
+#vertices = [3, 4, 5, 6, 7, 8, 9]
+#
+#diff_df = pd.read_pickle("data/difference_value_simple.pickle")
+#
+#CORRETTO:
+#
 #diff_ged_sim = pd.DataFrame(columns=['difference'])
 #for i in range(len(experiments_df)):
-#    diff_ged_sim.loc[len(diff_ged_sim)] = (sim_sel_df.iloc[i] - experiments_sel_df.iloc[i])
+#    diff_ged_sim.loc[len(diff_ged_sim)] = np.abs(results_WITHB_df['BEBS_sim'][i] - experiments_sel_df.iloc[i])
 #
 #diff_ged_2000 = pd.DataFrame(columns=['difference'])
-#for i in range(270):
-#    diff_ged_2000.loc[len(diff_ged_2000)] = (dwave_2000_sel_df.iloc[i] - experiments_sel_df.iloc[i])
+#for i in range(len(experiments_df)):
+#    if results_WITHB_df['BEBS_2000'][i] is None:
+#        diff_ged_2000.loc[len(diff_ged_2000)] = {}
+#    else:
+#        diff_ged_2000.loc[len(diff_ged_2000)] = np.abs(results_WITHB_df['BEBS_2000'][i] - experiments_sel_df.iloc[i])
+#
+#
+#diff_ged_2000_lp = pd.DataFrame(columns=['difference'])
+#for i in range(len(experiments_df)):
+#    if results_WITHB_df['BEBS_2000_lt'][i] is None:
+#        diff_ged_2000_lp.loc[len(diff_ged_2000_lp)] = {}
+#    else:
+#        diff_ged_2000_lp.loc[len(diff_ged_2000_lp)] = np.abs(results_WITHB_df['BEBS_2000_lt'][i] - experiments_sel_df.iloc[i])
+#
+#diff_ged_2000_pm = pd.DataFrame(columns=['difference'])
+#for i in range(len(experiments_df)):
+#    if results_WITHB_df['BEBS_2000_pm'][i] is None:
+#        diff_ged_2000_pm.loc[len(diff_ged_2000_pm)] = {}
+#    else:
+#        diff_ged_2000_pm.loc[len(diff_ged_2000_pm)] = np.abs(results_WITHB_df['BEBS_2000_pm'][i] - experiments_sel_df.iloc[i])
 #
 #diff_ged_adv = pd.DataFrame(columns=['difference'])
 #for i in range(len(experiments_df)):
-#    diff_ged_adv.loc[len(diff_ged_adv)] = (dwave_adv_sel_df.iloc[i] - experiments_sel_df.iloc[i])
+#    diff_ged_adv.loc[len(diff_ged_adv)] = np.abs(results_WITHB_df['BEBS_adv'][i] - experiments_sel_df.iloc[i])
+#
+#diff_ged_adv_lp = pd.DataFrame(columns=['difference'])
+#for i in range(len(experiments_df)):
+#    diff_ged_adv_lp.loc[len(diff_ged_adv_lp)] = np.abs(results_WITHB_df['BEBS_adv_lt'][i] - experiments_sel_df.iloc[i])
+#
+#diff_ged_adv_pm = pd.DataFrame(columns=['difference'])
+#for i in range(len(experiments_df)):
+#    diff_ged_adv_pm.loc[len(diff_ged_adv_pm)] = np.abs(results_WITHB_df['BEBS_adv_pm'][i] - experiments_sel_df.iloc[i])
 #
 #diff_ged_leap = pd.DataFrame(columns=['difference'])
 #for i in range(len(experiments_df)):
-#    diff_ged_leap.loc[len(diff_ged_leap)] = (dwave_leap_sel_df.iloc[i] - experiments_sel_df.iloc[i])
+#    diff_ged_leap.loc[len(diff_ged_leap)] = np.abs(results_WITHB_df['BEBS_leap'][i] - experiments_sel_df.iloc[i])
+#
+#
+#
+#columns = ['vertices', 'b','GED_vs_sim', 'GED_vs_2000', 'GED_vs_2000_lt', 'GED_vs_2000_pm', 'GED_vs_adv', 'GED_vs_adv_lt', 'GED_vs_adv_pm', 'GED_vs_leap']
+#diff_df = pd.concat([experiments_df['vertices'], experiments_df['b'], diff_ged_sim, diff_ged_2000, diff_ged_2000_lp, diff_ged_2000_pm, diff_ged_adv, diff_ged_adv_lp, diff_ged_adv_pm, diff_ged_leap], axis=1)
+#diff_df.columns = columns
 
-#df = pd.concat([diff_ged_2000, dwave_2000_df['num_source_variables']], axis=1)
-
+#diff_ged_sim = pd.DataFrame(columns=['difference'])
+#for i in range(len(experiments_df)):
+#    diff_ged_sim.loc[len(diff_ged_sim)] = np.abs(sim_sel_df.iloc[i] - experiments_sel_df.iloc[i])
+#
+#diff_ged_2000 = pd.DataFrame(columns=['difference'])
+#for i in range(270):
+#    diff_ged_2000.loc[len(diff_ged_2000)] = np.abs(dwave_2000_sel_df.iloc[i] - experiments_sel_df.iloc[i])
+#
+#diff_ged_adv = pd.DataFrame(columns=['difference'])
+#for i in range(len(experiments_df)):
+#    diff_ged_adv.loc[len(diff_ged_adv)] = np.abs(dwave_adv_sel_df.iloc[i] - experiments_sel_df.iloc[i])
+#
+#diff_ged_leap = pd.DataFrame(columns=['difference'])
+#for i in range(len(experiments_df)):
+#    diff_ged_leap.loc[len(diff_ged_leap)] = np.abs(dwave_leap_sel_df.iloc[i] - experiments_sel_df.iloc[i])
+#
+#columns = ['GED_vs_sim', 'GED_vs_2000', 'GED_vs_adv', 'GED_vs_leap', 'b']
+#diff_df = pd.concat([diff_ged_sim, diff_ged_2000, diff_ged_adv, diff_ged_leap, experiments_df['b']], axis=1)
+#diff_df.columns = columns
+#
 #print(results_withB_df)
