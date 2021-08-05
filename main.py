@@ -4,7 +4,7 @@ warnings.filterwarnings("ignore")
 from graphcreator import generate_graph_dataframe
 from experimentcreator import generate_experiments_dataframe
 from dwavesolutioncreator import * # generate_dwave_dataframe, run_dwave_2000_experiment, run_dwave_advantage_experiment, run_simulated_experiment, run_dwave_leap_experiment
-# from qaoasolutioncreator import generate_qaoa_dataframe, run_qaoa_p1, run_qaoa_p3, run_qaoa_p5
+from qaoasolutioncreator import generate_qaoa_dataframe, run_qaoa_p1, run_qaoa_p3, run_qaoa_p5
 import multiprocessing
 import numpy as np
 from datetime import datetime
@@ -138,21 +138,21 @@ if __name__ == '__main__':
     # dwave_2_df = generate_dwave_dataframe(DWAVE_2000_2_PATH)
     # run_experiments(experiments_df, run_dwave_2000_experiment_pm, dwave_2_df, DWAVE_2000_2_PATH)
 
-    DWAVE_ADV_1_PATH = f"data/dwave_advantage_solutions_LP.pickle"
-    dwave_adv_1_df = generate_dwave_dataframe(DWAVE_ADV_1_PATH)
-    run_experiments(experiments_df, run_dwave_advantage_experiment_lp, dwave_adv_1_df, DWAVE_ADV_1_PATH)
+    # DWAVE_ADV_1_PATH = f"data/dwave_advantage_solutions_LP.pickle"
+    # dwave_adv_1_df = generate_dwave_dataframe(DWAVE_ADV_1_PATH)
+    # run_experiments(experiments_df, run_dwave_advantage_experiment_lp, dwave_adv_1_df, DWAVE_ADV_1_PATH)
 
-    DWAVE_ADV_2_PATH = f"data/dwave_advantage_solutions_PM.pickle"
-    dwave_adv_2_df = generate_dwave_dataframe(DWAVE_ADV_2_PATH)
-    run_experiments(experiments_df, run_dwave_advantage_experiment_pm, dwave_adv_2_df, DWAVE_ADV_2_PATH)
+    # DWAVE_ADV_2_PATH = f"data/dwave_advantage_solutions_PM.pickle"
+    # dwave_adv_2_df = generate_dwave_dataframe(DWAVE_ADV_2_PATH)
+    # run_experiments(experiments_df, run_dwave_advantage_experiment_pm, dwave_adv_2_df, DWAVE_ADV_2_PATH)
 
-    ## qaoa
-    #QAOA_1_PATH = "data/qaoa_p1_solutions.pickle"
-    #QAOA_3_PATH = "data/qaoa_p3_solutions.pickle"
-    #QAOA_5_PATH = "data/qaoa_p5_solutions.pickle"
-    #qaoa_1_df = generate_qaoa_dataframe(QAOA_1_PATH)
-    #qaoa_3_df = generate_qaoa_dataframe(QAOA_3_PATH)
-    #qaoa_5_df = generate_qaoa_dataframe(QAOA_5_PATH)
-    #run_experiments(experiments_df, run_qaoa_p1, qaoa_1_df, QAOA_1_PATH)
-    #run_experiments(experiments_df, run_qaoa_p3, qaoa_3_df, QAOA_3_PATH)
-    #run_experiments(experiments_df, run_qaoa_p5, qaoa_5_df, QAOA_5_PATH)
+    # qaoa
+    QAOA_1_PATH = "data/qaoa_p1_solutions.pickle"
+    QAOA_3_PATH = "data/qaoa_p3_solutions.pickle"
+    QAOA_5_PATH = "data/qaoa_p5_solutions.pickle"
+    qaoa_1_df = generate_qaoa_dataframe(QAOA_1_PATH)
+    qaoa_3_df = generate_qaoa_dataframe(QAOA_3_PATH)
+    qaoa_5_df = generate_qaoa_dataframe(QAOA_5_PATH)
+    run_experiments(experiments_df, run_qaoa_p1, qaoa_1_df, QAOA_1_PATH)
+    run_experiments(experiments_df, run_qaoa_p3, qaoa_3_df, QAOA_3_PATH)
+    run_experiments(experiments_df, run_qaoa_p5, qaoa_5_df, QAOA_5_PATH)

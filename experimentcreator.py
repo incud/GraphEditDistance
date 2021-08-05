@@ -105,7 +105,8 @@ def generate_experiments_dataframe(the_path, the_graph_df):
         the_experiments_df = pd.DataFrame(columns=columns)
 
         vertices = the_graph_df['vertices'].unique()
-        for v in vertices:
+
+        for v in [3, 4, 5]:
             print(f"=================== VERTICES {v} ===================")
             has_v_vertices = the_graph_df['vertices'] == v
             v_graph_df = the_graph_df[has_v_vertices]
