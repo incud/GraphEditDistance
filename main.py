@@ -5,6 +5,7 @@ from graphcreator import generate_graph_dataframe
 from experimentcreator import generate_experiments_dataframe
 from dwavesolutioncreator import * # generate_dwave_dataframe, run_dwave_2000_experiment, run_dwave_advantage_experiment, run_simulated_experiment, run_dwave_leap_experiment
 from qaoasolutioncreator import generate_qaoa_dataframe, run_qaoa_p1, run_qaoa_p3, run_qaoa_p5
+from vqesolutioncreator import generate_vqe_dataframe, run_vqe_p1, run_vqe_p3
 import multiprocessing
 import numpy as np
 from datetime import datetime
@@ -147,12 +148,23 @@ if __name__ == '__main__':
     # run_experiments(experiments_df, run_dwave_advantage_experiment_pm, dwave_adv_2_df, DWAVE_ADV_2_PATH)
 
     # qaoa
-    QAOA_1_PATH = "data/qaoa_p1_solutions.pickle"
-    QAOA_3_PATH = "data/qaoa_p3_solutions.pickle"
-    QAOA_5_PATH = "data/qaoa_p5_solutions.pickle"
-    qaoa_1_df = generate_qaoa_dataframe(QAOA_1_PATH)
-    qaoa_3_df = generate_qaoa_dataframe(QAOA_3_PATH)
-    qaoa_5_df = generate_qaoa_dataframe(QAOA_5_PATH)
-    run_experiments(experiments_df, run_qaoa_p1, qaoa_1_df, QAOA_1_PATH)
-    run_experiments(experiments_df, run_qaoa_p3, qaoa_3_df, QAOA_3_PATH)
-    run_experiments(experiments_df, run_qaoa_p5, qaoa_5_df, QAOA_5_PATH)
+    # QAOA_1_PATH = "data/qaoa_p1_solutions.pickle"
+    # QAOA_3_PATH = "data/qaoa_p3_solutions.pickle"
+    # QAOA_5_PATH = "data/qaoa_p5_solutions.pickle"
+    # qaoa_1_df = generate_qaoa_dataframe(QAOA_1_PATH)
+    # qaoa_3_df = generate_qaoa_dataframe(QAOA_3_PATH)
+    # qaoa_5_df = generate_qaoa_dataframe(QAOA_5_PATH)
+    # run_experiments(experiments_df, run_qaoa_p1, qaoa_1_df, QAOA_1_PATH)
+    # run_experiments(experiments_df, run_qaoa_p3, qaoa_3_df, QAOA_3_PATH)
+    # run_experiments(experiments_df, run_qaoa_p5, qaoa_5_df, QAOA_5_PATH)
+
+    # VQE
+    VQE_1_PATH = "data/vqe_p1_solutions.pickle"
+    VQE_3_PATH = "data/vqe_p3_solutions.pickle"
+    VQE_5_PATH = "data/vqe_p5_solutions.pickle"
+    vqe_1_df = generate_qaoa_dataframe(VQE_1_PATH)
+    #vqe_3_df = generate_qaoa_dataframe(VQE_3_PATH)
+    #vqe_5_df = generate_qaoa_dataframe(VQE_5_PATH)
+    run_experiments(experiments_df, run_qaoa_p1, vqe_1_df, VQE_1_PATH)
+    #run_experiments(experiments_df, run_qaoa_p3, vqe_3_df, VQE_3_PATH)
+    #run_experiments(experiments_df, run_qaoa_p5, vqe_5_df, VQE_5_PATH)
