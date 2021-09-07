@@ -124,11 +124,13 @@ diff_qaoa_vqe = pd.read_pickle("data/qaoa_vqe_difference_WITHB.pickle")
 #    q_p1.iloc[i] = np.abs((q_p1.iloc[i]/b_df.iloc[i]) - experiments_sel_df.iloc[i])
 #    q_p3.iloc[i] = np.abs((q_p3.iloc[i]/b_df.iloc[i]) - experiments_sel_df.iloc[i])
 #    vq_p1.iloc[i] = np.abs((vq_p1.iloc[i]/b_df.iloc[i]) - experiments_sel_df.iloc[i])
-#    vq_p3.iloc[i] = np.abs((q_p3.iloc[i]/b_df.iloc[i]) - experiments_sel_df.iloc[i])
+#    vq_p3.iloc[i] = np.abs((vq_p3.iloc[i]/b_df.iloc[i]) - experiments_sel_df.iloc[i])
 #
 #new_diff_df = pd.concat([new_diff['v'], new_diff['b'], new_diff['GED'], q_p1, q_p3,vq_p1,vq_p3], axis=1)
 #new_diff_df.columns = columns
 #
+#new_diff_df.to_pickle("data/qaoa_vqe_difference_WITHB.pickle")
+
 
 
 #
