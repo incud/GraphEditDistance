@@ -29,6 +29,7 @@ def generate_3_nodes_graphs():
 
     return g1,g2,g3
 
+
 def generate_graph_dataframe(the_path):
     if path.exists(the_path):
         print("Loaded from file")

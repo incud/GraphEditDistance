@@ -10,17 +10,24 @@ from dwave.system import LeapHybridSampler
 from greedy import SteepestDescentSolver
 
 
+def normalize_cost(experiment, sample):
+    HARD_CONSTRAINT = 10000
+    model = generate_hamiltonian(experiment["g1"], experiment["g2"], HARD_CONSTRAINT, 1).compile()
+    e = model.to_bqm().energy(sample)
+    return min(e, experiment["vertices"]**2)
+
+
 def generate_dwave_dataframe(the_path):
     if path.exists(the_path):
         print("generate_dwave_dataframe: Loaded from file")
         return pd.read_pickle(the_path)
     else:
         print("generate_dwave_dataframe: Create")
-        columns = ["experiment", "start", "end",
+        columns = ["experiment", "l", "start", "end",
                    "best_sample", "best_energy", "best_energy_by_sample",
                    "best_sample_pp", "best_energy_pp", "best_energy_by_sample_pp",
                    "num_source_variables", "num_target_variables", "max_chain_length", "chain_strength", "chain_break_method",
-                   "annealing_time", "annealing_schedule"]
+                   "annealing_time", "annealing_schedule", "normalize_cost"]
         return pd.DataFrame(columns=columns)
 
 
@@ -53,7 +60,8 @@ def run_simulated_experiment(experiment, queue):
             "num_target_variables": 0,
             "max_chain_length": 0,
             "chain_strength": 0,
-            "chain_break_method": 0
+            "chain_break_method": 0,
+            "normalize_cost": normalize_cost(experiment, best_sample.sample)
     }
     queue.put(row)
 
@@ -90,8 +98,12 @@ def run_dwave_experiment(experiment, machine, queue, long_time=False, pause_midd
     qpu = DWaveSampler(solver=machine)
     sampler = EmbeddingComposite(qpu)
 
+    # fixed to make only long time
+    long_time = False
+    pause_middle = False
+
     annealer_props = {}
-    annealing_time = 500 if long_time else qpu.properties["default_annealing_time"]
+    annealing_time = 1 if long_time else qpu.properties["default_annealing_time"]
     anneal_schedule = [[0.0, 0.0], [5, 0.45], [99, 0.45], [100, 1.0]] if pause_middle else [[0.0, 0.0], [100, 1.0]]
 
     # https://docs.dwavesys.com/docs/latest/_downloads/342c755e402be92be6fa87fb48190868/09-1107B-E_DeveloperGuideTiming.pdf
@@ -102,7 +114,29 @@ def run_dwave_experiment(experiment, machine, queue, long_time=False, pause_midd
         annealer_props["anneal_schedule"] = anneal_schedule
 
     print(f"Machine={machine} Props={annealer_props}")
-    sample_set = sampler.sample(bqm, num_reads=1000, answer_mode='raw', return_embedding=True, **annealer_props)
+    BIG_NUM_READS = 10000
+    try:
+        sample_set = sampler.sample(bqm, num_reads=BIG_NUM_READS, answer_mode='raw', return_embedding=True, **annealer_props)
+    except:
+        row = {
+            "best_sample": None,
+            "best_energy": None,
+            "best_energy_by_sample": None,
+            "best_sample_pp": None,
+            "best_energy_pp": None,
+            "best_energy_by_sample_pp": None,
+            "num_source_variables": None,
+            "num_target_variables": None,
+            "max_chain_length": None,
+            "chain_strength": None,
+            "chain_break_method": None,
+            "annealing_time": None,
+            "annealing_schedule": None,
+            "normalize_cost": experiment["vertices"]**2
+        }
+        queue.put(row)
+        return
+
     decoded_samples = model.decode_sampleset(sample_set)
     best_sample = min(decoded_samples, key=lambda x: x.energy)
 
@@ -150,7 +184,8 @@ def run_dwave_experiment(experiment, machine, queue, long_time=False, pause_midd
             "chain_strength": chain_strength,
             "chain_break_method": chain_break_method,
             "annealing_time": annealing_time,
-            "annealing_schedule": annealer_props.get("anneal_schedule", None)
+            "annealing_schedule": annealer_props.get("anneal_schedule", None),
+            "normalize_cost": normalize_cost(experiment, best_sample.sample)
     }
     queue.put(row)
 
@@ -182,6 +217,7 @@ def run_dwave_leap_experiment(experiment, queue):
             "num_target_variables": 0,
             "max_chain_length": 0,
             "chain_strength": 0,
-            "chain_break_method": 0
+            "chain_break_method": 0,
+            "normalize_cost": normalize_cost(experiment, best_sample.sample)
     }
     queue.put(row)
