@@ -163,15 +163,22 @@ graph_df.to_pickle(GRAPHS_PATH)
 EXPERIMENTS_PATH = "data/experiments.pickle"
 experiments_df = generate_experiments_dataframe(EXPERIMENTS_PATH, graph_df)
 experiments_df.to_pickle(EXPERIMENTS_PATH)
-experiment1 = experiments_df.loc[15]
-experiment2 = experiments_df.loc[16]
-experiment3 = experiments_df.loc[17]
+experiment15 = experiments_df.loc[15]
+experiment16 = experiments_df.loc[16]
+experiment17 = experiments_df.loc[17]
+experiment04 = experiments_df.loc[4]
+experiment24 = experiments_df.loc[24]
 N = 256
-# matrix1 = run_qaoa_landscape(experiment1, N=N)
-matrix2 = run_qaoa_landscape(experiment2, N=N)
-np.savetxt("variational_landscape/qaoa_p1_experiment16_N256_landscape.csv", matrix2, delimiter=",")
-matrix3 = run_qaoa_landscape(experiment3, N=N)
-np.savetxt("variational_landscape/qaoa_p1_experiment17_N256_landscape.csv", matrix3, delimiter=",")
+# matrix15 = run_qaoa_landscape(experiment15, N=N)
+# np.savetxt("variational_landscape/qaoa_p1_experiment15_N256_landscape.csv", matrix15, delimiter=",")
+# matrix16 = run_qaoa_landscape(experiment16, N=N)
+# np.savetxt("variational_landscape/qaoa_p1_experiment16_N256_landscape.csv", matrix15, delimiter=",")
+# matrix17 = run_qaoa_landscape(experiment17, N=N)
+# np.savetxt("variational_landscape/qaoa_p1_experiment17_N256_landscape.csv", matrix16, delimiter=",")
+matrix04 = run_qaoa_landscape(experiment04, N=N)
+np.savetxt("variational_landscape/qaoa_p1_experiment04_N256_landscape.csv", matrix04, delimiter=",")
+matrix24 = run_qaoa_landscape(experiment24, N=N)
+np.savetxt("variational_landscape/qaoa_p1_experiment24_N256_landscape.csv", matrix24, delimiter=",")
 # plt.imshow(matrix, cmap='hot', interpolation='nearest')
-ax = seaborn.heatmap(matrix2)
-plt.show()
+# ax = seaborn.heatmap(matrix2)
+# plt.show()
