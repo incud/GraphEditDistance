@@ -147,9 +147,10 @@ def run_qaoa_landscape(experiment, N=1000, p=1):
             energy = bqm.energy(sample)
             matrix[i][j] = energy
             print(".", end="")
-        print()
+        print("\n", i, end="")
 
     return matrix
+
 
 pd.set_option('display.max_rows', 500)
 pd.set_option('display.max_columns', 500)
@@ -172,5 +173,5 @@ np.savetxt("variational_landscape/qaoa_p1_experiment16_N256_landscape.csv", matr
 matrix3 = run_qaoa_landscape(experiment3, N=N)
 np.savetxt("variational_landscape/qaoa_p1_experiment17_N256_landscape.csv", matrix3, delimiter=",")
 # plt.imshow(matrix, cmap='hot', interpolation='nearest')
-ax = seaborn.heatmap(matrix)
+ax = seaborn.heatmap(matrix2)
 plt.show()
