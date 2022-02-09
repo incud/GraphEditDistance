@@ -99,8 +99,8 @@ for i, df in enumerate(NEW_DF):
     NEW_DF[i]['normalized_cost'] = NEW_DF[i].apply(lambda row: normalize_cost(row.g1, row.g2, row.v, row.best_sample), axis=1)
     NEW_DF[i]['relative_distance'] = NEW_DF[i].apply(lambda row: rel_diff(row.exact_distance, row.normalized_cost), axis=1)
 
-for i, df in enumerate(OLD_DF+NEW_DF):
-    print(f"Length of {i}th DF: {len(df)}")
+#for i, df in enumerate(OLD_DF+NEW_DF):
+#    print(f"Length of {i}th DF: {len(df)}")
 
 relative_distance_df = pd.DataFrame()
 relative_distance_df['v'] = experiments_new_df['vertices']
@@ -112,31 +112,39 @@ NAMES_DF = ['SA',
             'leap', 'vqe p1', 'vqe p3', 'qaoa p1', 'qaoa p3']
 
 for i, (df, name) in enumerate(zip(ORDERED_DF, NAMES_DF)):
-    print('processing ', name)
+    # print('processing ', name)
     relative_distance_df[name] = df['relative_distance']
 
 relative_distance_df = relative_distance_df.fillna(1.0)
 
-print("\n\nRELATIVE DISTANCE")
-print(relative_distance_df.groupby(['v']).mean().round(decimals=2))
+#print("\n\nRELATIVE DISTANCE")
+#print(relative_distance_df.groupby(['v']).mean().round(decimals=2))
 
-print("\n\nSUCCESS PROBABILITY")
+#print("\n\nSUCCESS PROBABILITY")
 success_probability = (relative_distance_df < 0.001).astype(int)
 success_probability['v'] = relative_distance_df['v']
-print(success_probability.groupby(['v']).mean().round(decimals=2))
+#print(success_probability.groupby(['v']).mean().round(decimals=2))
 
-print("\n\nHIGH QUALITY PROBABILITY")
+#print("\n\nHIGH QUALITY PROBABILITY")
 hq_probability = (relative_distance_df <= 0.20).astype(int)
 hq_probability['v'] = relative_distance_df['v']
-print(hq_probability.groupby(['v']).mean().round(decimals=2))
+#print(hq_probability.groupby(['v']).mean().round(decimals=2))
 
 
 # ===========================================
 
-def create_plot(x, df, columns, labels, xlbl, ylbl, xlim=9.5):
-    plt.figure()
+def create_plot(x, df_mean, df_std, columns, labels, xlbl, ylbl, xlim=9.5):
+    fig = plt.figure()
     for i, (col, lbl) in enumerate(zip(columns, labels)):
-        plt.plot(x, df[col][:len(x)], label=lbl)
+        this_mean = df_mean[col][:len(x)]
+        this_std = df_std[col][:len(x)]
+        this_lower_error = [min(this_std.iloc[i], this_mean.iloc[i]) for i in range(len(this_mean))]
+        this_upper_error = [min(this_std.iloc[i], 1-this_mean.iloc[i]) for i in range(len(this_mean))]
+        this_error = [this_lower_error, this_upper_error]
+        markers, caps, bars = plt.errorbar(x, df_mean[col][:len(x)], yerr=this_error, label=lbl, capsize=8)
+        [bar.set_alpha(0.33) for bar in bars]
+        [cap.set_alpha(0.33) for cap in caps]
+
     plt.xlabel(xlbl, fontsize=20)
     plt.ylabel(ylbl, fontsize=20)
     plt.legend(fontsize=14)
@@ -144,60 +152,79 @@ def create_plot(x, df, columns, labels, xlbl, ylbl, xlim=9.5):
     plt.yticks(fontsize=14)
     plt.xlim((3, xlim))
     plt.ylim((0, 1.1))
+    return fig
 
 x = range(3, 10)
-rdg = relative_distance_df.groupby(['v']).mean().round(decimals=2)
-spg = success_probability.groupby(['v']).mean().round(decimals=2)
-hpg = hq_probability.groupby(['v']).mean().round(decimals=2)
+rdg_mean = relative_distance_df.groupby(['v']).mean().round(decimals=2)
+spg_mean = success_probability.groupby(['v']).mean().round(decimals=2)
+hpg_mean = hq_probability.groupby(['v']).mean().round(decimals=2)
+rdg_std = relative_distance_df.groupby(['v']).std().round(decimals=2)
+spg_std = success_probability.groupby(['v']).std().round(decimals=2)
+hpg_std = hq_probability.groupby(['v']).std().round(decimals=2)
+
+# Turn off interactive mode
+plt.ioff()
 
 # DWAVE plots configurations
-create_plot(x, rdg, ['SA', '2000 1us', '2000 20us', '2000 dc', '2000 lt', '2000 pm'],
+fig = create_plot(x, rdg_mean, rdg_std, ['SA', '2000 1us', '2000 20us', '2000 dc', '2000 lt', '2000 pm'],
             ['SA', 'D1', 'D20', 'D21', 'D500', 'D100'], "N", "Average relative difference")
 plt.savefig("plot_performances_new/2000_configurations_reldiff.png", dpi=300, bbox_inches='tight')
-create_plot(x, rdg, ['SA', 'adv 1us', 'adv 20us', 'adv dc', 'adv lt', 'adv pm'],
+plt.close(fig)
+fig = create_plot(x, rdg_mean, rdg_std, ['SA', 'adv 1us', 'adv 20us', 'adv dc', 'adv lt', 'adv pm'],
             ['SA', 'D1', 'D20', 'D21', 'D500', 'D100'], "N", "Average relative difference")
 plt.savefig("plot_performances_new/adv_configurations_reldiff.png", dpi=300, bbox_inches='tight')
+plt.close(fig)
 
-create_plot(x, spg, ['SA', '2000 1us', '2000 20us', '2000 dc', '2000 lt', '2000 pm'],
+fig = create_plot(x, spg_mean, spg_std, ['SA', '2000 1us', '2000 20us', '2000 dc', '2000 lt', '2000 pm'],
             ['SA', 'D1', 'D20', 'D21', 'D500', 'D100'], "N", "Success probability")
 plt.savefig("plot_performances_new/2000_configurations_sp.png", dpi=300, bbox_inches='tight')
-create_plot(x, spg, ['SA', 'adv 1us', 'adv 20us', 'adv dc', 'adv lt', 'adv pm'],
+plt.close(fig)
+fig = create_plot(x, spg_mean, spg_std, ['SA', 'adv 1us', 'adv 20us', 'adv dc', 'adv lt', 'adv pm'],
             ['SA', 'D1', 'D20', 'D21', 'D500', 'D100'], "N", "Success probability")
 plt.savefig("plot_performances_new/adv_configurations_sp.png", dpi=300, bbox_inches='tight')
+plt.close(fig)
 
-create_plot(x, hpg, ['SA', '2000 1us', '2000 20us', '2000 dc', '2000 lt', '2000 pm'],
+fig = create_plot(x, hpg_mean, hpg_std, ['SA', '2000 1us', '2000 20us', '2000 dc', '2000 lt', '2000 pm'],
             ['SA', 'D1', 'D20', 'D21', 'D500', 'D100'], "N", "High quality probability")
 plt.savefig("plot_performances_new/2000_configurations_hqp.png", dpi=300, bbox_inches='tight')
-create_plot(x, hpg, ['SA', 'adv 1us', 'adv 20us', 'adv dc', 'adv lt', 'adv pm'],
+plt.close(fig)
+fig = create_plot(x, hpg_mean, hpg_std, ['SA', 'adv 1us', 'adv 20us', 'adv dc', 'adv lt', 'adv pm'],
             ['SA', 'D1', 'D20', 'D21', 'D500', 'D100'], "N", "High quality probability")
 plt.savefig("plot_performances_new/adv_configurations_hqp.png", dpi=300, bbox_inches='tight')
+plt.close(fig)
 
 # DWAVE plots configurations
-create_plot(x, rdg, ['SA', '2000 20us', 'adv 20us', 'leap'],
+fig = create_plot(x, rdg_mean, rdg_std, ['SA', '2000 20us', 'adv 20us', 'leap'],
             ['SA', '2000', 'ADV', 'LEAP'], "N", "Average relative difference")
 plt.savefig("plot_performances_new/dwave_configurations_reldiff.png", dpi=300, bbox_inches='tight')
+plt.close(fig)
 
-create_plot(x, spg, ['SA', '2000 20us', 'adv 20us', 'leap'],
+fig = create_plot(x, spg_mean, spg_std, ['SA', '2000 20us', 'adv 20us', 'leap'],
             ['SA', '2000', 'ADV', 'LEAP'], "N", "Success probability")
 plt.savefig("plot_performances_new/dwave_configurations_sp.png", dpi=300, bbox_inches='tight')
+plt.close(fig)
 
-create_plot(x, hpg, ['SA', '2000 20us', 'adv 20us', 'leap'],
+fig = create_plot(x, hpg_mean, hpg_std, ['SA', '2000 20us', 'adv 20us', 'leap'],
             ['SA', '2000', 'ADV', 'LEAP'], "N", "High quality probability")
 plt.savefig("plot_performances_new/dwave_configurations_hqp.png", dpi=300, bbox_inches='tight')
+plt.close(fig)
 
 # variationals
 x = range(3, 6)
-create_plot(x, rdg, ['SA', 'vqe p1', 'vqe p3', 'qaoa p1', 'qaoa p3'],
+fig = create_plot(x, rdg_mean, rdg_std, ['SA', 'vqe p1', 'vqe p3', 'qaoa p1', 'qaoa p3'],
             ['SA', 'VQEp1', 'VQEp3', 'QAOAp1', 'QAOAp3'], "N", "Average relative difference")
 plt.savefig("plot_performances_new/variational_configurations_reldiff.png", dpi=300, bbox_inches='tight')
+plt.close(fig)
 
-create_plot(x, spg, ['SA', 'vqe p1', 'vqe p3', 'qaoa p1', 'qaoa p3'],
+fig = create_plot(x, spg_mean, spg_std, ['SA', 'vqe p1', 'vqe p3', 'qaoa p1', 'qaoa p3'],
             ['SA', 'VQEp1', 'VQEp3', 'QAOAp1', 'QAOAp3'], "N", "Success probability")
 plt.savefig("plot_performances_new/variational_configurations_sp.png", dpi=300, bbox_inches='tight')
+plt.close(fig)
 
-create_plot(x, hpg, ['SA', 'vqe p1', 'vqe p3', 'qaoa p1', 'qaoa p3'],
+fig = create_plot(x, hpg_mean, hpg_std, ['SA', 'vqe p1', 'vqe p3', 'qaoa p1', 'qaoa p3'],
             ['SA', 'VQEp1', 'VQEp3', 'QAOAp1', 'QAOAp3'], "N", "High quality probability")
 plt.savefig("plot_performances_new/variational_configurations_hqp.png", dpi=300, bbox_inches='tight')
+plt.close(fig)
 
 from qiskit.providers.aer.backends.backend_utils import (cpp_execute, available_methods, MAX_QUBITS_STATEVECTOR)
 from qiskit.providers.aer.backends.controller_wrappers import qasm_controller_execute
