@@ -112,7 +112,7 @@ def run_vqe_landscape(experiment, N=1000, p=1):
     return matrix
 
 
-def run_qaoa_landscape(experiment, N=1000, p=1):
+def run_qaoa_landscape(experiment, N=1000, p=1, pos=False):
 
     bqm = experiment["bqm"]
     hamiltonian = generate_hamiltonian(experiment["g1"], experiment["g2"], experiment["a"], experiment["b"])
@@ -139,9 +139,15 @@ def run_qaoa_landscape(experiment, N=1000, p=1):
     # RUN QAOA p=1
     matrix = np.random.random((N, N))
     for i in range(N):
-        alpha0 = (-np.pi) + 2 * np.pi * i / N
+        if pos:
+            alpha0 = np.pi * i / N
+        else:
+            alpha0 = (-np.pi) + 2 * np.pi * i / N
         for j in range(N):
-            alpha1 = (-np.pi) + 2 * np.pi * j / N
+            if pos:
+                alpha1 = np.pi * j / N
+            else:
+                alpha1 = (-np.pi) + 2 * np.pi * j / N
             binary_vector = run_variational(operator, [alpha0, alpha1], is_vqe=False, p=1)
             sample = vector_to_sample(binary_vector, map_names, variables)
             energy = bqm.energy(sample)
@@ -177,8 +183,10 @@ N = 256
 # np.savetxt("variational_landscape/qaoa_p1_experiment17_N256_landscape.csv", matrix16, delimiter=",")
 # matrix04 = run_qaoa_landscape(experiment04, N=N)
 # np.savetxt("variational_landscape/qaoa_p1_experiment04_N256_landscape.csv", matrix04, delimiter=",")
-matrix24 = run_qaoa_landscape(experiment24, N=N)
-np.savetxt("variational_landscape/qaoa_p1_experiment24_N256_landscape.csv", matrix24, delimiter=",")
+# matrix24 = run_qaoa_landscape(experiment24, N=N)
+# np.savetxt("variational_landscape/qaoa_p1_experiment24_N256_landscape.csv", matrix24, delimiter=",")
 # plt.imshow(matrix, cmap='hot', interpolation='nearest')
-ax = seaborn.heatmap(matrix24)
+matrix15pos = run_qaoa_landscape(experiment15, N=N, pos=True)
+np.savetxt("variational_landscape/qaoa_p1_experiment15_N256_pos_landscape.csv", matrix15pos, delimiter=",")
+ax = seaborn.heatmap(matrix15pos)
 plt.show()
